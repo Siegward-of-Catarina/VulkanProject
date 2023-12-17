@@ -1,8 +1,8 @@
-#include "App.h"
+#include "app.hpp"
 
 void App::run()
 {
    init();
-   mainLoop();
+   main_loop();
    cleanup();
 }
