@@ -15,13 +15,16 @@
     <ClCompile Include="lib\glwindow.cpp" />
     <ClCompile Include="hello_triangle_app.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="lib\vulkan.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="api\vulkan.hpp" />
     <ClInclude Include="api\window.hpp" />
     <ClInclude Include="app.hpp" />
     <ClInclude Include="lib\glwindow.hpp" />
     <ClInclude Include="hello_triangle_app.hpp" />
     <ClInclude Include="lib\interface.hpp" />
+    <ClInclude Include="lib\vulkan.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

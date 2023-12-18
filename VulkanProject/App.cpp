@@ -1,8 +1,12 @@
 #include "app.hpp"
 
-void App::run()
+namespace core
 {
-   init();
-   main_loop();
-   cleanup();
+   void app::run()
+   {
+      init();
+      main_loop();
+      cleanup();
+   }
 }
+

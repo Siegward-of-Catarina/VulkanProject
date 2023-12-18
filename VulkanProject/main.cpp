@@ -7,7 +7,7 @@
 
 int main()
 {
-   my_lib::HelloTriangleApp app;
+   my_app::hello_triangle_app app;
    try
    {
       app.run();

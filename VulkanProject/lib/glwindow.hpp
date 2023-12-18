@@ -8,14 +8,13 @@ namespace lib::window
    class glwindow: public api::window::glwindow
    {
    private:
-      
+      glwindow() = delete;
+      ~glwindow();
+   private:
       GLFWwindow*         glfw_window;
       const std::uint32_t width;
       const std::uint32_t height;
       const char*         title;
-      ~glwindow();
-
-      glwindow() = delete;
    public:
       explicit glwindow( const std::uint32_t width,
                          const std::uint32_t height,
