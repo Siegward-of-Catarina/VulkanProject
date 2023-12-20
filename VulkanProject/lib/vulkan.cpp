@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
 #include <algorithm>
 #include <string>
-#include <vector>
+#include <iostream>
 
 namespace
 {
@@ -81,7 +81,7 @@ namespace lib::renderer
 
    }
 
-   bool vulkan::check_validationlayer_support( std::vector<const char*, std::allocator<const char*> > validationlayers )
+   bool vulkan::check_validationlayer_support( std::vector<const char*> validationlayers )
    { 
        //使用可能なレイヤー数を取得
        std::uint32_t layer_count;
@@ -94,7 +94,7 @@ namespace lib::renderer
       return false;
    }
 
-   void vulkan::check_extension_support( const char** extensions, const std::uint32_t count )
+   void vulkan::check_extension_support( const char** extensions, const unsigned count )
    {
       // 全てのサポートしている拡張機能の数のみ取得
       std::uint32_t extension_count = 0;
