@@ -1,7 +1,8 @@
 #pragma once
 #include "../api/vulkan.hpp"
-#include <vulkan/vulkan.h>
+
 #include <vector>
+#include <vulkan/vulkan.h>
 
 namespace lib::renderer
 {
@@ -9,9 +10,12 @@ namespace lib::renderer
    {
    private:
       ~vulkan() = default;
-      void create_instace();
-      void check_extension_support( const char** extensions, const unsigned  count );
-      bool check_validationlayer_support( std::vector<const char*> validationlayers );
+      void                     create_instace();
+      void                     get_vkinstance_create_info( VkApplicationInfo* app_info, VkInstanceCreateInfo* create_info );
+      std::vector<const char*> get_required_extensions( const bool enable_validationlayers );
+      bool                     check_extension_support( std::vector<const char*> extensions );
+      bool                     check_validationlayer_support( std::vector<const char*> validationlayers );
+
    private:
       VkInstance vk_instance;
 
