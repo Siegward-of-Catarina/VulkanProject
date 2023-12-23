@@ -5,18 +5,21 @@
 
 namespace my_app
 {
-   void hello_triangle_app::init()
+   void
+   hello_triangle_app::init()
    {
       window->init();
       renderer->init();
    }
 
-   void hello_triangle_app::main_loop()
+   void
+   hello_triangle_app::main_loop()
    {
       while ( !window->close() ) { window->pool_event(); }
    }
 
-   void hello_triangle_app::cleanup()
+   void
+   hello_triangle_app::cleanup()
    {
       renderer->release();
       // window‚Ì‰ğ•ú‚Íˆê”ÔÅŒã

@@ -4,7 +4,9 @@ namespace api::renderer
 {
    struct vulkan : public lib::base::interface
    {
-      virtual void init() = 0;
+      virtual void
+      init() = 0;
    };
-   vulkan* create();
+   vulkan*
+   create();
 }    // namespace api::renderer

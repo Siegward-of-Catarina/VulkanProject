@@ -5,7 +5,8 @@
 #include <iostream>
 #include <stdexcept>
 
-int main()
+int
+main()
 {
    my_app::hello_triangle_app app;
    try
@@ -13,7 +14,7 @@ int main()
       app.run();
    } catch ( const std::exception& e )
    {
-      std::cerr << e.what() << std::endl;//cerr 標準エラー出力に対する出力ストリーム
+      std::cerr << e.what() << std::endl;    // cerr 標準エラー出力に対する出力ストリーム
       return EXIT_FAILURE;
    }
    return EXIT_SUCCESS;

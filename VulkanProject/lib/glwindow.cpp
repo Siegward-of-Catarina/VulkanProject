@@ -11,18 +11,28 @@ namespace lib::window
 
    glwindow::~glwindow() {}
 
-   int glwindow::close() { return glfwWindowShouldClose( glfw_window ); }
+   int
+   glwindow::close()
+   {
+      return glfwWindowShouldClose( glfw_window );
+   }
 
-   void glwindow::pool_event() { glfwPollEvents(); }
+   void
+   glwindow::pool_event()
+   {
+      glfwPollEvents();
+   }
 
-   void glwindow::release()
+   void
+   glwindow::release()
    {
       glfwDestroyWindow( glfw_window );
       glfwTerminate();
       delete this;
    }
 
-   void glwindow::init()
+   void
+   glwindow::init()
    {
       // glfw èâä˙âª
       glfwInit();
@@ -39,7 +49,8 @@ namespace lib::window
 
 namespace api::window
 {
-   glwindow* create( const std::uint32_t width, const std::uint32_t height, const char* title )
+   glwindow*
+   create( const std::uint32_t width, const std::uint32_t height, const char* title )
    {
       return new lib::window::glwindow( width, height, title );
    }

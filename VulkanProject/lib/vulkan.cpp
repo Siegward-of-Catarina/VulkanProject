@@ -13,10 +13,12 @@ namespace
 
 namespace lib::renderer
 {
-
    vulkan::vulkan() : vk_instance { VK_NULL_HANDLE } {}
-   void vulkan::create_instace()
+
+   void
+   vulkan::create_instace()
    {
+
       VkApplicationInfo app_info {};
       // アプリケーションの詳細設定
       {
@@ -28,38 +30,32 @@ namespace lib::renderer
          app_info.apiVersion         = VK_API_VERSION_1_0;
       }
 
-      VkInstanceCreateInfo create_info {};
 #ifdef NDEBUG
       const bool enable_validationlayers = false;
 #else
       const bool enable_validationlayers = true;
 #endif    // NDEBUG
-      // 検証レイヤー
-      std::vector<const char*> validationlayers { "VK_LAYER_KHRONOS_validation" };
 
-      // インスタンス作成の詳細設定
-      create_info.sType            = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-      create_info.pApplicationInfo = &app_info;
-      // mac os に対応するためこのフラグがいる
-      create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
       // ==[ 拡張機能 ]==========================
-      auto extensions = get_required_extensions( enable_validationlayers );
+      std::vector<const char*> extensions { get_required_extensions( enable_validationlayers ) };
       if ( !check_extension_support( extensions ) )
-         throw std::runtime_error( "extensions requested, but not available!" );
-
-      create_info.enabledExtensionCount   = static_cast<uint32_t>( extensions.size() );
-      create_info.ppEnabledExtensionNames = extensions.data();
-      // ==[ 検証レイヤー ]================================
-      if ( enable_validationlayers )
       {
-         if ( !check_validationlayer_support( validationlayers ) )
-            throw std::runtime_error( "validation layers requested, but not available!" );
-
-         create_info.enabledLayerCount   = static_cast<uint32_t>( validationlayers.size() );
-         create_info.ppEnabledLayerNames = validationlayers.data();
+         throw std::runtime_error( "extensions requested, but not available!" );
       }
-      else { create_info.enabledLayerCount = 0; }
-      //get_vkinstance_create_info( &app_info, &create_info );
+
+      // 検証レイヤー
+      std::vector<const char*> validationlayers;
+      if ( enable_validationlayers )    // デバッグ時のみ有効ニスル
+      {
+         validationlayers.emplace_back( "VK_LAYER_KHRONOS_validation" );
+         if ( !check_validationlayer_support( validationlayers ) )
+         {
+            throw std::runtime_error( "validation layers requested, but not available!" );
+         }
+      }
+
+      // create_info 取得
+      VkInstanceCreateInfo create_info = get_vkinstance_create_info( &app_info, extensions, validationlayers );
 
       // ようやく生成
       if ( vkCreateInstance( &create_info, nullptr, &vk_instance ) != VK_SUCCESS )
@@ -67,42 +63,35 @@ namespace lib::renderer
          throw std::runtime_error( "failed to create instance!" );
       }
    }
-   void vulkan::get_vkinstance_create_info( VkApplicationInfo* app_info, VkInstanceCreateInfo* create_info )
+   VkInstanceCreateInfo
+   vulkan::get_vkinstance_create_info( const VkApplicationInfo*        app_info,
+                                       const std::vector<const char*>& extensions,
+                                       const std::vector<const char*>& validationlayers )
    {
-
-#ifdef NDEBUG
-      const bool enable_validationlayers = false;
-#else
-      const bool enable_validationlayers = true;
-#endif    // NDEBUG
-      // 検証レイヤー
-      std::vector<const char*> validationlayers { "VK_LAYER_KHRONOS_validation" };
-
       // インスタンス作成の詳細設定
-      create_info->sType            = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-      create_info->pApplicationInfo = app_info;
+      VkInstanceCreateInfo create_info {};
+      create_info.sType            = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+      create_info.pApplicationInfo = app_info;
+
       // mac os に対応するためこのフラグがいる
-      create_info->flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+      create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+
       // ==[ 拡張機能 ]==========================
-      auto extensions = get_required_extensions( enable_validationlayers );
-      if ( !check_extension_support( extensions ) )
-         throw std::runtime_error( "extensions requested, but not available!" );
+      create_info.enabledExtensionCount   = static_cast<uint32_t>( extensions.size() );
+      create_info.ppEnabledExtensionNames = extensions.data();
 
-      create_info->enabledExtensionCount   = static_cast<uint32_t>( extensions.size() );
-      create_info->ppEnabledExtensionNames = extensions.data();
       // ==[ 検証レイヤー ]================================
-      if ( enable_validationlayers )
+      if ( !validationlayers.empty() )
       {
-         if ( !check_validationlayer_support( validationlayers ) )
-            throw std::runtime_error( "validation layers requested, but not available!" );
-
-         create_info->enabledLayerCount   = static_cast<uint32_t>( validationlayers.size() );
-         create_info->ppEnabledLayerNames = validationlayers.data();
+         create_info.enabledLayerCount   = static_cast<uint32_t>( validationlayers.size() );
+         create_info.ppEnabledLayerNames = validationlayers.data();
       }
-      else { create_info->enabledLayerCount = 0; }
-   }
+      else { create_info.enabledLayerCount = 0; }
 
-   std::vector<const char*> vulkan::get_required_extensions( const bool enable_validationlayers )
+      return create_info;
+   }
+   std::vector<const char*>
+   vulkan::get_required_extensions( const bool enable_validationlayers )
    {
       uint32_t     glfw_extension_count = 0;
       const char** glfw_extensions;
@@ -114,8 +103,8 @@ namespace lib::renderer
       if ( enable_validationlayers ) { extensions.emplace_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME ); }
       return extensions;
    }
-
-   bool vulkan::check_validationlayer_support( std::vector<const char*> validationlayers )
+   bool
+   vulkan::check_validationlayer_support( const std::vector<const char*>& validationlayers )
    {
       // 使用可能なレイヤー数を取得
       std::uint32_t layer_count;
@@ -142,7 +131,8 @@ namespace lib::renderer
       }
       return true;
    }
-   bool vulkan::check_extension_support( std::vector<const char*> extensions )
+   bool
+   vulkan::check_extension_support( const std::vector<const char*>& extensions )
    {
       // 全てのサポートしている拡張機能の数のみ取得
       std::uint32_t extension_count = 0;
@@ -174,9 +164,13 @@ namespace lib::renderer
       }
       return true;
    }
-
-   void vulkan::init() { create_instace(); }
-   void vulkan::release()
+   void
+   vulkan::init()
+   {
+      create_instace();
+   }
+   void
+   vulkan::release()
    {
       vkDestroyInstance( vk_instance, nullptr );
       delete this;
@@ -185,5 +179,9 @@ namespace lib::renderer
 
 namespace api::renderer
 {
-   vulkan* create() { return new lib::renderer::vulkan(); }
+   vulkan*
+   create()
+   {
+      return new lib::renderer::vulkan();
+   }
 }    // namespace api::renderer

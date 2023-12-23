@@ -3,7 +3,8 @@ namespace lib::base
 {
    struct interface
    {
-      virtual void release() = 0;
+      virtual void
+      release() = 0;
 
    protected:
       virtual ~interface() = default;

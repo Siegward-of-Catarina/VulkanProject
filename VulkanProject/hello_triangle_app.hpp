@@ -17,9 +17,12 @@ namespace my_app
    class hello_triangle_app : public core::app
    {
    private:
-      void                   init() override;
-      void                   main_loop() override;
-      void                   cleanup() override;
+      void
+      init() override;
+      void
+      main_loop() override;
+      void
+                             cleanup() override;
       api::window::glwindow* window;
       api::renderer::vulkan* renderer;
 
