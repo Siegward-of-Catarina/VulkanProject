@@ -9,16 +9,34 @@ namespace
 {
    const std::uint32_t WIDTH  = 800;
    const std::uint32_t HEIGHT = 600;
+#ifdef NDEBUG
+   const bool enable_validationlayers = false;
+#else
+   const bool enable_validationlayers = true;
+#endif    // NDEBUG
 }    // namespace
 
 namespace lib::renderer
 {
    vulkan::vulkan() : vk_instance { VK_NULL_HANDLE } {}
+   /*
+    VkDebugUtilsMessageSeverityFlagBitsEXT :　メッセージの重要度
+    VkDebugUtilsMessageTypeFlagsEXT : メッセージの種類
+    const VkDebugUtilsMessageCallbackDataEXT* : メッセージの詳細を含む構造体、pCallbackDataを参照。
+   */
+   VKAPI_ATTR VkBool32 VKAPI_CALL
+   vulkan::debag_callBack( VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
+                           VkDebugUtilsMessageTypeFlagsEXT             message_type,
+                           const VkDebugUtilsMessengerCallbackDataEXT* pCallback_data,
+                           void*                                       pUser_data )
+   {
+      std::cerr << "validation layer:" << pCallback_data->pMessage << std::endl;
+      return VK_FALSE;
+   }
 
    void
    vulkan::create_instace()
    {
-
       VkApplicationInfo app_info {};
       // アプリケーションの詳細設定
       {
@@ -29,12 +47,6 @@ namespace lib::renderer
          app_info.engineVersion      = VK_MAKE_VERSION( 1, 0, 0 );
          app_info.apiVersion         = VK_API_VERSION_1_0;
       }
-
-#ifdef NDEBUG
-      const bool enable_validationlayers = false;
-#else
-      const bool enable_validationlayers = true;
-#endif    // NDEBUG
 
       // ==[ 拡張機能 ]==========================
       std::vector<const char*> extensions { get_required_extensions( enable_validationlayers ) };
@@ -62,6 +74,11 @@ namespace lib::renderer
       {
          throw std::runtime_error( "failed to create instance!" );
       }
+   }
+   void
+   vulkan::setup_debug_messenger()
+   {
+
    }
    VkInstanceCreateInfo
    vulkan::get_vkinstance_create_info( const VkApplicationInfo*        app_info,

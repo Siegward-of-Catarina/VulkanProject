@@ -1,17 +1,24 @@
 #pragma once
 #include "../api/vulkan.hpp"
 
-#include <vector>
+#include <vector>   
 #include <vulkan/vulkan.h>
 
 namespace lib::renderer
 {
    class vulkan : public api::renderer::vulkan
    {
+   private://static
+      static VKAPI_ATTR VkBool32 VKAPI_CALL
+      debag_callBack( VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
+                      VkDebugUtilsMessageTypeFlagsEXT             message_type,
+                      const VkDebugUtilsMessengerCallbackDataEXT* pCallback_data,
+                      void*                                       pUser_data );
    private:
       ~vulkan() = default;
       void
       create_instace();
+
       VkInstanceCreateInfo
       get_vkinstance_create_info( const VkApplicationInfo*        app_info,
                                   const std::vector<const char*>& extensions,
