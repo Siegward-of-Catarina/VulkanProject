@@ -285,6 +285,7 @@ namespace lib::renderer
          vkGetPhysicalDeviceQueueFamilyProperties( device, &family_count, nullptr );
 
          std::vector<VkQueueFamilyProperties> family_properties( family_count );
+         vkGetPhysicalDeviceQueueFamilyProperties( device, &family_count, family_properties.data() );
          return indices;
       }
       void
