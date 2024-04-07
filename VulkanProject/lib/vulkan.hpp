@@ -12,27 +12,27 @@ namespace lib::renderer
       static VKAPI_ATTR VkBool32 VKAPI_CALL
       debag_callBack( VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
                       VkDebugUtilsMessageTypeFlagsEXT             message_type,
-                      const VkDebugUtilsMessengerCallbackDataEXT* pCallback_data,
-                      void*                                       pUser_data );
+                      const VkDebugUtilsMessengerCallbackDataEXT* callback_data_ptr,
+                      void*                                       user_data_ptr );
    private:
       ~vulkan() = default;
       void
       create_instace();
+      void
+      setup_debug_messenger();
 
-      VkInstanceCreateInfo
-      get_vkinstance_create_info( const VkApplicationInfo*        app_info,
-                                  const std::vector<const char*>& extensions,
-                                  const std::vector<const char*>& validationlayers );
       std::vector<const char*>
       get_required_extensions( const bool enable_validationlayers );
       bool
       check_extension_support( const std::vector<const char*>& extensions );
       bool
       check_validationlayer_support( const std::vector<const char*>& validationlayers );
+      void
+      populate_debug_messenger_create_info( VkDebugUtilsMessengerCreateInfoEXT& create_info );
 
    private:
       VkInstance vk_instance;
-
+      VkDebugUtilsMessengerEXT vk_debug_messenger;
    public:
       void
       init() override;
