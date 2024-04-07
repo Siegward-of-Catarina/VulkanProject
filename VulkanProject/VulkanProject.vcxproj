@@ -18,6 +18,7 @@
     <ClCompile Include="lib\vulkan.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="api\directX12.hpp" />
     <ClInclude Include="api\vulkan.hpp" />
     <ClInclude Include="api\window.hpp" />
     <ClInclude Include="app.hpp" />

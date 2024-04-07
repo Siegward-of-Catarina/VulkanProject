@@ -9,4 +9,6 @@ namespace api::renderer
    };
    vulkan*
    create();
+   // namespace vulkan
+
 }    // namespace api::renderer
