@@ -31,6 +31,26 @@ namespace lib::window
       delete this;
    }
 
+   const GLFWwindow*
+   glwindow::get_window()
+   {
+      if ( glfw_window == nullptr ) { throw std::runtime_error( "glfw_window is nullptr" ); }
+      else { return glfw_window; }
+      return nullptr;
+   }
+
+   const std::uint32_t
+   glwindow::get_width()
+   {
+      return width;
+   }
+
+   const std::uint32_t
+   glwindow::get_height()
+   {
+      return height;
+   }
+
    void
    glwindow::init()
    {

@@ -28,6 +28,13 @@ namespace lib::window
       pool_event();
       void
       release();
+
+      const GLFWwindow*
+      get_window();
+      const std::uint32_t
+      get_width();
+      const std::uint32_t
+      get_height();
    };
 
 }    // namespace lib::window

@@ -1,5 +1,7 @@
 #include "vulkan.hpp"
 
+#include "glwindow.hpp"
+
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
 #include <algorithm>
 #include <iostream>
@@ -8,14 +10,14 @@
 
 namespace
 {
-   const std::uint32_t            WIDTH            = 800;
-   const std::uint32_t            HEIGHT           = 600;
+   const std::uint32_t            WIDTH  = 800;
+   const std::uint32_t            HEIGHT = 600;
    const std::vector<const char*> validationlayers = { "VK_LAYER_KHRONOS_validation" };
 #ifdef NDEBUG
    const bool enable_validationlayers = false;
 #else
    const bool enable_validationlayers = true;
-#endif    // NDEBUG
+#endif         // NDEBUG
 
    VkResult    // VkDebugUtilsMessengerEXTを作成する関数を探し出す
    create_debug_utils_messenger_ext( VkInstance                                instance,
@@ -168,6 +170,49 @@ namespace lib::renderer
          else { throw std::runtime_error( "failed to find a suitable GPU!" ); }
       }
 
+      void
+      core::create_logical_device()
+      {
+         // 論理デバイスを作成するためにキューの詳細を決める
+         queue_family_indices indices =
+           find_queue_familie( vk_physical_device );    // 今はグラフィック機能を備えたキューがあればいい
+         float queue_priority = 1.0f;    // キューに対して優先度をつけるための値 //現状キューは1つだが、必要
+         VkDeviceQueueCreateInfo queue_create_info {};
+         queue_create_info.sType            = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+         queue_create_info.queueFamilyIndex = indices.graphics_family.value();
+         queue_create_info.queueCount       = 1;
+         queue_create_info.pQueuePriorities = &queue_priority;
+
+         // デバイスの機能セットを指定する
+         VkPhysicalDeviceFeatures device_features {};
+
+         // 論理デバイスの詳細を設定
+         VkDeviceCreateInfo create_info {};
+         create_info.sType                 = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+         create_info.pQueueCreateInfos     = &queue_create_info;
+         create_info.queueCreateInfoCount  = queue_create_info.queueCount;
+         create_info.pEnabledFeatures      = &device_features;
+         create_info.enabledExtensionCount = 0;
+         // デバイス固有の拡張機能が対応しているかチェックする
+
+         // デバッグ時のみ検証レイヤーを有効化
+         if ( enable_validationlayers )
+         {
+            create_info.enabledLayerCount   = static_cast<uint32_t>( validationlayers.size() );
+            create_info.ppEnabledLayerNames = validationlayers.data();
+         }
+         else { create_info.enabledLayerCount = 0; }
+
+         // 論理デバイスを作成
+         if ( vkCreateDevice( vk_physical_device, &create_info, nullptr, &vk_device ) != VK_SUCCESS )
+         {
+            throw std::runtime_error( "faied to create logical device!" );
+         }
+
+         // キューをハンドルに取得
+         vkGetDeviceQueue( vk_device, indices.graphics_family.value(), 0, &vk_graphics_queue );
+      }
+
       std::vector<const char*>
       core::get_required_extensions( const bool enable_validationlayers )
       {
@@ -308,7 +353,7 @@ namespace lib::renderer
          create_info.pUserData       = nullptr;
       }
       void
-      core::init()
+      core::init( lib::window::glwindow& window )
       {
          create_instace();
          setup_debug_messenger();
@@ -317,14 +362,15 @@ namespace lib::renderer
       void
       core::release()
       {
-         if ( enable_validationlayers )
+         vkDestroyDevice( vk_device, nullptr );    // 論理デバイス
+         if ( enable_validationlayers )            // デバッグメッセンジャー
          {
             destroy_debug_utils_messenger_ext( vk_instance, vk_debug_messenger, nullptr );
          }
-         vkDestroyInstance( vk_instance, nullptr );
-         delete this;
+         vkDestroyInstance( vk_instance, nullptr );    // Vulkanインスタンス
+         delete this;                                  // デストラクタ
       }
-   }    // namespace vulkan
+   }                                                   // namespace vulkan
    // vulkan::queue_family
    namespace vulkan
    {
