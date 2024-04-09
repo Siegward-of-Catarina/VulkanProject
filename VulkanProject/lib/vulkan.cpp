@@ -43,6 +43,7 @@ namespace
 
 namespace lib::renderer
 {
+   // vulkan::core
    namespace vulkan
    {
       core::core()
@@ -244,14 +245,9 @@ namespace lib::renderer
       bool
       core::is_device_suitable( VkPhysicalDevice device )
       {
-         // デバイスの基本情報を取得
-         VkPhysicalDeviceProperties device_properties;
-         vkGetPhysicalDeviceProperties( device, &device_properties );
-         // デバイスのオプション情報を取得
-         VkPhysicalDeviceFeatures device_features;
-         vkGetPhysicalDeviceFeatures( device, &device_features );
-         // 今回の条件は、CPU内臓のGPUでないこと。そして、ジオメトリーシェーダーに対応していること。
-         return device_properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && device_features.geometryShader;
+         queue_family_indices indices = find_queue_familie( device );
+
+         return indices.isComplete();
       }
       int
       core::rate_device_suitability( VkPhysicalDevice device )
@@ -272,6 +268,7 @@ namespace lib::renderer
 
          // ジオメトリシェーダーへの対応は必須とする
          if ( !device_features.geometryShader ) { return 0; }
+         if ( !is_device_suitable( device ) ) { return 0; }
 
          return score;
       }
@@ -284,8 +281,16 @@ namespace lib::renderer
          uint32_t family_count = 0;
          vkGetPhysicalDeviceQueueFamilyProperties( device, &family_count, nullptr );
 
-         std::vector<VkQueueFamilyProperties> family_properties( family_count );
-         vkGetPhysicalDeviceQueueFamilyProperties( device, &family_count, family_properties.data() );
+         std::vector<VkQueueFamilyProperties> queue_families( family_count );
+         vkGetPhysicalDeviceQueueFamilyProperties( device, &family_count, queue_families.data() );
+
+         int i = 0;
+         for ( const auto& queue_family : queue_families )
+         {
+            if ( queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT ) { indices.graphics_family = i; }
+            if ( indices.isComplete() ) { break; }
+            i++;
+         }
          return indices;
       }
       void
@@ -307,6 +312,7 @@ namespace lib::renderer
       {
          create_instace();
          setup_debug_messenger();
+         pick_up_physical_device();
       }
       void
       core::release()
@@ -317,6 +323,15 @@ namespace lib::renderer
          }
          vkDestroyInstance( vk_instance, nullptr );
          delete this;
+      }
+   }    // namespace vulkan
+   // vulkan::queue_family
+   namespace vulkan
+   {
+      bool
+      queue_family_indices::isComplete()
+      {
+         return graphics_family.has_value();
       }
    }    // namespace vulkan
 

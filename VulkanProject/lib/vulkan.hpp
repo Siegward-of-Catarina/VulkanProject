@@ -12,6 +12,8 @@ namespace lib::renderer
       struct queue_family_indices
       {
          std::optional<uint32_t> graphics_family; // optional : ‚±‚ê‚Å’l‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©‚ğ”»’è‚Å‚«‚é
+         bool
+         isComplete();
       };
       class core : public api::renderer::vulkan
       {
