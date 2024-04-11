@@ -18,13 +18,9 @@
     <ClCompile Include="lib\vulkan.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="api\directX12.hpp" />
-    <ClInclude Include="api\vulkan.hpp" />
-    <ClInclude Include="api\window.hpp" />
     <ClInclude Include="app.hpp" />
     <ClInclude Include="lib\glwindow.hpp" />
     <ClInclude Include="hello_triangle_app.hpp" />
-    <ClInclude Include="lib\interface.hpp" />
     <ClInclude Include="lib\vulkan.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -66,12 +66,3 @@ namespace lib::window
       glfw_window = glfwCreateWindow( width, height, title, nullptr, nullptr );
    }
 }    // namespace lib::window
-
-namespace api::window
-{
-   glwindow*
-   create( const std::uint32_t width, const std::uint32_t height, const char* title )
-   {
-      return new lib::window::glwindow( width, height, title );
-   }
-}    // namespace api::window

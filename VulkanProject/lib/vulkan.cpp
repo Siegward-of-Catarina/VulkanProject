@@ -382,12 +382,3 @@ namespace lib::renderer
    }    // namespace vulkan
 
 }    // namespace lib::renderer
-
-namespace api::renderer
-{
-   vulkan*
-   create()
-   {
-      return new lib::renderer::vulkan::core();
-   }
-}    // namespace api::renderer

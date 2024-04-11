@@ -1,5 +1,4 @@
 #pragma once
-#include "../api/vulkan.hpp"
 
 #include <vector>
 #include <optional>
@@ -18,7 +17,7 @@ namespace lib::renderer
          bool
          isComplete();
       };
-      class core : public api::renderer::vulkan
+      class core
       {
       private:    // static
          static VKAPI_ATTR VkBool32 VKAPI_CALL

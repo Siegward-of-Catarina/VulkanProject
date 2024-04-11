@@ -1,12 +1,11 @@
 #pragma once
-#include "../api/window.hpp"
 
 #include <iostream>
 struct GLFWwindow;
 struct GLFWmonitor;
 namespace lib::window
 {
-   class glwindow : public api::window::glwindow
+   class glwindow
    {
    private:
       glwindow() = delete;
