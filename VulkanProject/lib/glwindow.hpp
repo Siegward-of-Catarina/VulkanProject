@@ -3,7 +3,7 @@
 #include <iostream>
 struct GLFWwindow;
 struct GLFWmonitor;
-namespace lib::window
+namespace my_library::window
 {
    class glwindow
    {
