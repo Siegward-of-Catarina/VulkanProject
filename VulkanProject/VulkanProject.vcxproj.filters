@@ -12,5 +12,6 @@
     <ClInclude Include="lib\glwindow.hpp" />
     <ClInclude Include="hello_triangle_app.hpp" />
     <ClInclude Include="lib\vulkan.hpp" />
+    <ClInclude Include="lib\create_helper.hpp" />
   </ItemGroup>
 </Project>

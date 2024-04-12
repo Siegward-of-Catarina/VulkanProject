@@ -1,23 +1,24 @@
 #pragma once
+#include "create_helper.hpp"
 
-#include <vector>
 #include <optional>
+#include <vector>
 #include <vulkan/vulkan.h>
-namespace lib::window
+namespace my_library::window
 {
    class glwindow;
 }
-namespace lib::renderer
+namespace my_library
 {
    namespace vulkan
    {
       struct queue_family_indices
       {
-         std::optional<uint32_t> graphics_family; // optional : Ç±ÇÍÇ≈ílÇ™ë∂ç›Ç∑ÇÈÇ©Ç«Ç§Ç©ÇîªíËÇ≈Ç´ÇÈ
+         std::optional<uint32_t> graphics_family;    // optional : Ç±ÇÍÇ≈ílÇ™ë∂ç›Ç∑ÇÈÇ©Ç«Ç§Ç©ÇîªíËÇ≈Ç´ÇÈ
          bool
          isComplete();
       };
-      class core
+      class vulkan
       {
       private:    // static
          static VKAPI_ATTR VkBool32 VKAPI_CALL
@@ -27,7 +28,8 @@ namespace lib::renderer
                          void*                                       user_data_ptr );
 
       private:
-         ~core() = default;
+         vulkan();
+         ~vulkan() = default;
          void
          create_instace();
          void
@@ -58,13 +60,19 @@ namespace lib::renderer
          VkPhysicalDevice         vk_physical_device;
          VkDevice                 vk_device;
          VkQueue                  vk_graphics_queue;
+
+         using create_helper = my_library::helper::Impl<vulkan>;
+         friend create_helper;
+
+      public:
+         static vulkan*
+         create();
       public:
          void
-         init( lib::window::glwindow& window) override;
+         init( const my_library::window::glwindow& window );
          void
-         release() override;
-         core();
+         release();
       };
    }    // namespace vulkan
 
-}    // namespace lib::renderer
+}    // namespace my_library

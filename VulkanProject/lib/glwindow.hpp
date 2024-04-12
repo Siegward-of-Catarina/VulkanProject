@@ -1,15 +1,21 @@
 #pragma once
+#include "create_helper.hpp"
 
 #include <iostream>
 struct GLFWwindow;
 struct GLFWmonitor;
 namespace my_library::window
 {
+
    class glwindow
    {
    private:
+      explicit glwindow( const std::uint32_t width, const std::uint32_t height, const char* title );
       glwindow() = delete;
       ~glwindow();
+
+      using create_helper = my_library::helper::Impl<glwindow>;
+      friend create_helper;
 
    private:
       GLFWwindow*         glfw_window;
@@ -18,7 +24,10 @@ namespace my_library::window
       const char*         title;
 
    public:
-      explicit glwindow( const std::uint32_t width, const std::uint32_t height, const char* title );
+      static glwindow*
+      create( const std::uint32_t width, const std::uint32_t height, const char* title );
+
+   public:
       void
       init();
       int
@@ -36,4 +45,4 @@ namespace my_library::window
       get_height();
    };
 
-}    // namespace lib::window
+}    // namespace my_library::window

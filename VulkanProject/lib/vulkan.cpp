@@ -43,12 +43,12 @@ namespace
 
 }    // namespace
 
-namespace lib::renderer
+namespace my_library
 {
    // vulkan::core
    namespace vulkan
    {
-      core::core()
+      vulkan::vulkan()
         : vk_instance { VK_NULL_HANDLE }, vk_debug_messenger { VK_NULL_HANDLE }, vk_physical_device { VK_NULL_HANDLE }
       {}
       /*
@@ -57,7 +57,7 @@ namespace lib::renderer
        const VkDebugUtilsMessageCallbackDataEXT* : メッセージの詳細を含む構造体、pCallbackDataを参照。
       */
       VKAPI_ATTR VkBool32 VKAPI_CALL
-      core::debag_callBack( VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
+      vulkan::debag_callBack( VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
                             VkDebugUtilsMessageTypeFlagsEXT             message_type,
                             const VkDebugUtilsMessengerCallbackDataEXT* callback_data_ptr,
                             void*                                       user_data_ptr )
@@ -66,8 +66,14 @@ namespace lib::renderer
          return VK_FALSE;
       }
 
+      vulkan*
+      vulkan::create()
+      {
+         return new create_helper();
+      }
+
       void
-      core::create_instace()
+      vulkan::create_instace()
       {
          if ( enable_validationlayers
               && !check_validationlayer_support( validationlayers ) )    // デバッグ時のみ有効ニスル
@@ -126,7 +132,7 @@ namespace lib::renderer
          }
       }
       void
-      core::setup_debug_messenger()
+      vulkan::setup_debug_messenger()
       {
          if ( !enable_validationlayers ) return;
 
@@ -141,7 +147,7 @@ namespace lib::renderer
       }
 
       void
-      core::pick_up_physical_device()
+      vulkan::pick_up_physical_device()
       {
          // GPUの個数をまず取得
          uint32_t device_count = 0;
@@ -171,7 +177,7 @@ namespace lib::renderer
       }
 
       void
-      core::create_logical_device()
+      vulkan::create_logical_device()
       {
          // 論理デバイスを作成するためにキューの詳細を決める
          queue_family_indices indices =
@@ -214,7 +220,7 @@ namespace lib::renderer
       }
 
       std::vector<const char*>
-      core::get_required_extensions( const bool enable_validationlayers )
+      vulkan::get_required_extensions( const bool enable_validationlayers )
       {
          uint32_t     glfw_extension_count = 0;
          const char** glfw_extensions;
@@ -227,7 +233,7 @@ namespace lib::renderer
          return extensions;
       }
       bool
-      core::check_validationlayer_support( const std::vector<const char*>& validationlayers )
+      vulkan::check_validationlayer_support( const std::vector<const char*>& validationlayers )
       {
          // 使用可能なレイヤー数を取得
          std::uint32_t layer_count;
@@ -255,7 +261,7 @@ namespace lib::renderer
          return true;
       }
       bool
-      core::check_extension_support( const std::vector<const char*>& extensions )
+      vulkan::check_extension_support( const std::vector<const char*>& extensions )
       {
          // 全てのサポートしている拡張機能の数のみ取得
          std::uint32_t extension_count = 0;
@@ -288,14 +294,14 @@ namespace lib::renderer
          return true;
       }
       bool
-      core::is_device_suitable( VkPhysicalDevice device )
+      vulkan::is_device_suitable( VkPhysicalDevice device )
       {
          queue_family_indices indices = find_queue_familie( device );
 
          return indices.isComplete();
       }
       int
-      core::rate_device_suitability( VkPhysicalDevice device )
+      vulkan::rate_device_suitability( VkPhysicalDevice device )
       {
          int score = 0;
          // デバイスの基本情報を取得
@@ -318,7 +324,7 @@ namespace lib::renderer
          return score;
       }
       queue_family_indices
-      core::find_queue_familie( VkPhysicalDevice device )
+      vulkan::find_queue_familie( VkPhysicalDevice device )
       {
          queue_family_indices indices;
 
@@ -339,7 +345,7 @@ namespace lib::renderer
          return indices;
       }
       void
-      core::populate_debug_messenger_create_info( VkDebugUtilsMessengerCreateInfoEXT& create_info )
+      vulkan::populate_debug_messenger_create_info( VkDebugUtilsMessengerCreateInfoEXT& create_info )
       {
          create_info                 = {};
          create_info.sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -353,16 +359,16 @@ namespace lib::renderer
          create_info.pUserData       = nullptr;
       }
       void
-      core::init( lib::window::glwindow& window )
+      vulkan::init( const my_library::window::glwindow& window )
       {
          create_instace();
          setup_debug_messenger();
          pick_up_physical_device();
       }
       void
-      core::release()
+      vulkan::release()
       {
-         vkDestroyDevice( vk_device, nullptr );    // 論理デバイス
+         //vkDestroyDevice( vk_device, nullptr );    // 論理デバイス
          if ( enable_validationlayers )            // デバッグメッセンジャー
          {
             destroy_debug_utils_messenger_ext( vk_instance, vk_debug_messenger, nullptr );
@@ -382,3 +388,4 @@ namespace lib::renderer
    }    // namespace vulkan
 
 }    // namespace lib::renderer
+

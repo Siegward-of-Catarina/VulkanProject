@@ -1,17 +1,9 @@
 #pragma once
 #include "app.hpp"
-namespace api
+namespace my_library
 {
-   namespace window
-   {
-      struct glwindow;
-   }
-   namespace renderer
-   {
-       struct vulkan;
-   }
-
-}    // namespace api
+   class renderer;
+}
 namespace my_app
 {
    class hello_triangle_app : public core::app
@@ -23,8 +15,7 @@ namespace my_app
       main_loop() override;
       void
                              cleanup() override;
-      api::window::glwindow* window;
-      api::renderer::vulkan* renderer;
+      my_library::renderer* renderer;
 
    public:
       hello_triangle_app();

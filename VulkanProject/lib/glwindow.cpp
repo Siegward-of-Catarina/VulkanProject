@@ -3,8 +3,14 @@
 #define GLFW_INCLUDE_VULKAN    // GLFW には独自の定義が含まれ、それとともに Vulkan ヘッダーが自動的にロード
 #include <GLFW/glfw3.h>
 
-namespace lib::window
+namespace my_library::window
 {
+   glwindow*
+   glwindow::create( const std::uint32_t width, const std::uint32_t height, const char* title )
+   {
+      return new create_helper(width,height,title);
+   }
+
    glwindow::glwindow( const std::uint32_t width, const std::uint32_t height, const char* title )
      : glfw_window { nullptr }, width { width }, height { height }, title { title }
    {}
