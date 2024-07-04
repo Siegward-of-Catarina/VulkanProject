@@ -6,6 +6,8 @@
     <ClCompile Include="lib\glwindow.cpp" />
     <ClCompile Include="hello_triangle_app.cpp" />
     <ClCompile Include="lib\vulkan.cpp" />
+    <ClCompile Include="lib\instance.cpp" />
+    <ClCompile Include="lib\renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hpp" />
@@ -13,5 +15,7 @@
     <ClInclude Include="hello_triangle_app.hpp" />
     <ClInclude Include="lib\vulkan.hpp" />
     <ClInclude Include="lib\create_helper.hpp" />
+    <ClInclude Include="lib\instance.hpp" />
+    <ClInclude Include="lib\renderer.hpp" />
   </ItemGroup>
 </Project>

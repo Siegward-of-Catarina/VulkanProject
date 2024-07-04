@@ -3,30 +3,28 @@
 
 namespace my_library
 {
-   namespace window
-   {
-      class glwindow;
-   }
    namespace vulkan
    {
       class vulkan;
    }
+   namespace window
+   {
+      class glwindow;
+   }
    class renderer
    {
    private:
-      renderer() = delete;
-      renderer( const std::uint32_t width, const std::uint32_t height, const char* title );
+      renderer();
       ~renderer();
-      using create_helper = helper::Impl<renderer>;
-      friend create_helper;
+      CREATE_HELPER;
+      using create_helper = Impl<renderer>;
 
    private:
-      window::glwindow* window;
       vulkan::vulkan*   vulkan;
 
    public:
       static renderer*
-      create( const std::uint32_t width, const std::uint32_t height, const char* title );
+      create( );
 
    public:
       void

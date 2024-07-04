@@ -14,8 +14,8 @@ namespace my_library::window
       glwindow() = delete;
       ~glwindow();
 
-      using create_helper = my_library::helper::Impl<glwindow>;
-      friend create_helper;
+      CREATE_HELPER;
+      using create_helper = Impl<glwindow>;
 
    private:
       GLFWwindow*         glfw_window;

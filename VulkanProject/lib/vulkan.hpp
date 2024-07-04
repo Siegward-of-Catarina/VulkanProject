@@ -61,8 +61,8 @@ namespace my_library
          VkDevice                 vk_device;
          VkQueue                  vk_graphics_queue;
 
-         using create_helper = my_library::helper::Impl<vulkan>;
-         friend create_helper;
+         CREATE_HELPER;
+         using create_helper = Impl<vulkan>;
 
       public:
          static vulkan*

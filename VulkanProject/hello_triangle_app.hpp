@@ -3,6 +3,10 @@
 namespace my_library
 {
    class renderer;
+   namespace window
+   {
+      class glwindow;
+   }
 }
 namespace my_app
 {
@@ -15,6 +19,7 @@ namespace my_app
       main_loop() override;
       void
                              cleanup() override;
+      my_library::window::glwindow* window;
       my_library::renderer* renderer;
 
    public:
