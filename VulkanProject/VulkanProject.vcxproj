@@ -12,21 +12,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="app.cpp" />
-    <ClCompile Include="lib\instance.cpp" />
+    <ClCompile Include="lib\vulkan\debug_messenger.cpp" />
+    <ClCompile Include="lib\vulkan\extensions.cpp" />
+    <ClCompile Include="lib\vulkan\instance.cpp" />
     <ClCompile Include="lib\glwindow.cpp" />
     <ClCompile Include="hello_triangle_app.cpp" />
     <ClCompile Include="lib\renderer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="lib\vulkan.cpp" />
+    <ClCompile Include="lib\vulkan\vulkan.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hpp" />
-    <ClInclude Include="lib\instance.hpp" />
+    <ClInclude Include="lib\vulkan\debug_messenger.hpp" />
+    <ClInclude Include="lib\vulkan\extensions.hpp" />
+    <ClInclude Include="lib\vulkan\instance.hpp" />
     <ClInclude Include="lib\create_helper.hpp" />
     <ClInclude Include="lib\glwindow.hpp" />
     <ClInclude Include="hello_triangle_app.hpp" />
     <ClInclude Include="lib\renderer.hpp" />
-    <ClInclude Include="lib\vulkan.hpp" />
+    <ClInclude Include="lib\vulkan\vulkan.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

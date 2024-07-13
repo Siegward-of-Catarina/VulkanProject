@@ -1,6 +1,8 @@
 #include "vulkan.hpp"
 
-#include "glwindow.hpp"
+#include "../glwindow.hpp"
+#include "debug_messenger.hpp"
+#include "extensions.hpp"
 
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
 #include <algorithm>
@@ -10,36 +12,13 @@
 
 namespace
 {
-   const std::uint32_t            WIDTH  = 800;
-   const std::uint32_t            HEIGHT = 600;
-   const std::vector<const char*> validationlayers = { "VK_LAYER_KHRONOS_validation" };
+   const std::uint32_t WIDTH  = 800;
+   const std::uint32_t HEIGHT = 600;
 #ifdef NDEBUG
-   const bool enable_validationlayers = false;
+   const std::vector<const char*> validationlayers;
 #else
-   const bool enable_validationlayers = true;
-#endif         // NDEBUG
-
-   VkResult    // VkDebugUtilsMessengerEXTを作成する関数を探し出す
-   create_debug_utils_messenger_ext( VkInstance                                instance,
-                                     const VkDebugUtilsMessengerCreateInfoEXT* create_info_ptr,
-                                     const VkAllocationCallbacks*              allocator_ptr,
-                                     VkDebugUtilsMessengerEXT*                 debug_messenger_ptr )
-   {
-      auto func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(
-        vkGetInstanceProcAddr( instance, "vkCreateDebugUtilsMessengerEXT" ) );
-      if ( func != nullptr ) { return func( instance, create_info_ptr, allocator_ptr, debug_messenger_ptr ); }
-      else { return VK_ERROR_EXTENSION_NOT_PRESENT; }
-   }
-
-   void    // VkDebugUtilsMessengerEXTを解放する関数を探し出す
-   destroy_debug_utils_messenger_ext( VkInstance                   instance,
-                                      VkDebugUtilsMessengerEXT     debug_messenger,
-                                      const VkAllocationCallbacks* allocator_ptr )
-   {
-      auto func = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(
-        vkGetInstanceProcAddr( instance, "vkDestroyDebugUtilsMessengerEXT" ) );
-      if ( func != nullptr ) { func( instance, debug_messenger, allocator_ptr ); }
-   }
+   const std::vector<const char*> validationlayers { "VK_LAYER_KHRONOS_validation" };
+#endif    // NDEBUG
 
 }    // namespace
 
@@ -49,22 +28,11 @@ namespace my_library
    namespace vulkan
    {
       vulkan::vulkan()
-        : vk_instance { VK_NULL_HANDLE }, vk_debug_messenger { VK_NULL_HANDLE }, vk_physical_device { VK_NULL_HANDLE }
+        : vk_instance { VK_NULL_HANDLE }
+        , vk_debug_messenger { VK_NULL_HANDLE }
+        , vk_physical_device { VK_NULL_HANDLE }
+        , debug_messenger { debug_messenger::create() }
       {}
-      /*
-       VkDebugUtilsMessageSeverityFlagBitsEXT :　メッセージの重要度
-       VkDebugUtilsMessageTypeFlagsEXT : メッセージの種類
-       const VkDebugUtilsMessageCallbackDataEXT* : メッセージの詳細を含む構造体、pCallbackDataを参照。
-      */
-      VKAPI_ATTR VkBool32 VKAPI_CALL
-      vulkan::debag_callBack( VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
-                            VkDebugUtilsMessageTypeFlagsEXT             message_type,
-                            const VkDebugUtilsMessengerCallbackDataEXT* callback_data_ptr,
-                            void*                                       user_data_ptr )
-      {
-         std::cerr << "validation layer:" << callback_data_ptr->pMessage << std::endl;
-         return VK_FALSE;
-      }
 
       vulkan*
       vulkan::create()
@@ -75,7 +43,7 @@ namespace my_library
       void
       vulkan::create_instace()
       {
-         if ( enable_validationlayers
+         if ( !validationlayers.empty()
               && !check_validationlayer_support( validationlayers ) )    // デバッグ時のみ有効ニスル
          {
             throw std::runtime_error( "validation layers requested, but not available!" );
@@ -94,55 +62,23 @@ namespace my_library
 
          // インスタンス作成の詳細設定
          VkInstanceCreateInfo create_info {};
-         create_info.sType            = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-         create_info.pApplicationInfo = &app_info;
+         create_info.sType             = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+         create_info.pApplicationInfo  = &app_info;
+         create_info.enabledLayerCount = 0;          // いったんこれで設定しておく
+         create_info.pNext             = nullptr;    // いったんこれで設定しておく
          // mac os に対応するためこのフラグがいる
          create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 
          // ==[ 拡張機能 ]==========================
-         std::vector<const char*> extensions { get_required_extensions( enable_validationlayers ) };
-         if ( !check_extension_support( extensions ) )
-         {
-            throw std::runtime_error( "extensions requested, but not available!" );
-         }
-         create_info.enabledExtensionCount   = static_cast<uint32_t>( extensions.size() );
-         create_info.ppEnabledExtensionNames = extensions.data();
+         extensions::register_for_create_info( create_info );
 
          // ==[ 検証レイヤー ]===========================
-         // vkCreateInctance, vkDestroyInstanceの内部イベントに対応するためもう一つのdebugMessengerを用意する。
-         VkDebugUtilsMessengerCreateInfoEXT debug_create_info {};
-         if ( enable_validationlayers )    // デバッグ時のみ有効ニスル
-         {
-            create_info.enabledLayerCount   = static_cast<uint32_t>( validationlayers.size() );
-            create_info.ppEnabledLayerNames = validationlayers.data();
-            populate_debug_messenger_create_info( debug_create_info );
-            // ここでpNextにdebug_create_infoを指定することでcreate_infoが拡張されデバッグできるようになる。
-            create_info.pNext = reinterpret_cast<VkDebugUtilsMessengerCreateInfoEXT*>( &debug_create_info );
-         }
-         else
-         {
-            create_info.enabledLayerCount = 0;
-            create_info.pNext             = nullptr;
-         }
+         if ( !validationlayers.empty() ) debug_messenger->register_for_create_info( create_info, validationlayers );
 
          // ==[ ようやく生成 ]=============================
          if ( vkCreateInstance( &create_info, nullptr, &vk_instance ) != VK_SUCCESS )
          {
             throw std::runtime_error( "failed to create instance!" );
-         }
-      }
-      void
-      vulkan::setup_debug_messenger()
-      {
-         if ( !enable_validationlayers ) return;
-
-         VkDebugUtilsMessengerCreateInfoEXT create_info {};
-         populate_debug_messenger_create_info( create_info );
-
-         if ( create_debug_utils_messenger_ext( vk_instance, &create_info, nullptr, &vk_debug_messenger )
-              != VK_SUCCESS )
-         {
-            throw std::runtime_error( "failed to set up debug messenger!" );
          }
       }
 
@@ -202,7 +138,7 @@ namespace my_library
          // デバイス固有の拡張機能が対応しているかチェックする
 
          // デバッグ時のみ検証レイヤーを有効化
-         if ( enable_validationlayers )
+         if ( !validationlayers.empty() )
          {
             create_info.enabledLayerCount   = static_cast<uint32_t>( validationlayers.size() );
             create_info.ppEnabledLayerNames = validationlayers.data();
@@ -345,33 +281,19 @@ namespace my_library
          return indices;
       }
       void
-      vulkan::populate_debug_messenger_create_info( VkDebugUtilsMessengerCreateInfoEXT& create_info )
-      {
-         create_info                 = {};
-         create_info.sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-         create_info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT    // より詳細な情報
-                                     | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT    // 警告
-                                     | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;     // エラー
-         create_info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT    // いったんすべての種類を表示
-                                 | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
-                                 | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-         create_info.pfnUserCallback = debag_callBack;
-         create_info.pUserData       = nullptr;
-      }
-      void
       vulkan::init( const my_library::window::glwindow& window )
       {
          create_instace();
-         setup_debug_messenger();
+         if ( !validationlayers.empty() ) debug_messenger->setup_messenger( vk_instance );
          pick_up_physical_device();
       }
       void
       vulkan::release()
       {
-         //vkDestroyDevice( vk_device, nullptr );    // 論理デバイス
-         if ( enable_validationlayers )            // デバッグメッセンジャー
+         // vkDestroyDevice( vk_device, nullptr );    // 論理デバイス
+         if ( !validationlayers.empty() )    // デバッグメッセンジャー
          {
-            destroy_debug_utils_messenger_ext( vk_instance, vk_debug_messenger, nullptr );
+            debug_messenger->release( vk_instance );
          }
          vkDestroyInstance( vk_instance, nullptr );    // Vulkanインスタンス
          delete this;                                  // デストラクタ
@@ -387,5 +309,4 @@ namespace my_library
       }
    }    // namespace vulkan
 
-}    // namespace lib::renderer
-
+}    // namespace my_library

@@ -1,5 +1,5 @@
 #pragma once
-#include "create_helper.hpp"
+#include "../create_helper.hpp"
 
 #include <optional>
 #include <vector>
@@ -12,6 +12,9 @@ namespace my_library
 {
    namespace vulkan
    {
+      // ëOï˚éQè∆
+      class debug_messenger;
+
       struct queue_family_indices
       {
          std::optional<uint32_t> graphics_family;    // optional : Ç±ÇÍÇ≈ílÇ™ë∂ç›Ç∑ÇÈÇ©Ç«Ç§Ç©ÇîªíËÇ≈Ç´ÇÈ
@@ -20,20 +23,11 @@ namespace my_library
       };
       class vulkan
       {
-      private:    // static
-         static VKAPI_ATTR VkBool32 VKAPI_CALL
-         debag_callBack( VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
-                         VkDebugUtilsMessageTypeFlagsEXT             message_type,
-                         const VkDebugUtilsMessengerCallbackDataEXT* callback_data_ptr,
-                         void*                                       user_data_ptr );
-
       private:
          vulkan();
          ~vulkan() = default;
          void
          create_instace();
-         void
-         setup_debug_messenger();
          void
          pick_up_physical_device();
          void
@@ -50,8 +44,6 @@ namespace my_library
          rate_device_suitability( VkPhysicalDevice device );
          queue_family_indices
          find_queue_familie( VkPhysicalDevice device );
-         void
-         populate_debug_messenger_create_info( VkDebugUtilsMessengerCreateInfoEXT& create_info );
 
       private:
          VkInstance               vk_instance;
@@ -61,12 +53,15 @@ namespace my_library
          VkDevice                 vk_device;
          VkQueue                  vk_graphics_queue;
 
+         debug_messenger* debug_messenger;
+
          CREATE_HELPER;
          using create_helper = Impl<vulkan>;
 
       public:
          static vulkan*
          create();
+
       public:
          void
          init( const my_library::window::glwindow& window );
