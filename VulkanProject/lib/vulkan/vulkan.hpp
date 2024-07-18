@@ -1,43 +1,39 @@
 #pragma once
-#include "../create_helper.hpp"
 
+#include "common.hpp"
+
+#include <memory>
 #include <optional>
 #include <vector>
-#include <vulkan/vulkan.h>
-namespace my_library::window
-{
-   class glwindow;
-}
+struct GLFWwindow;
 namespace my_library
 {
    namespace vulkan
    {
-      // ëOï˚éQè∆
-      class debug_messenger;
-
+      class instance;
+      class vulkan_debug;
+   }    // namespace vulkan
+}    // namespace my_library
+namespace my_library
+{
+   namespace vulkan
+   {
       struct queue_family_indices
       {
          std::optional<uint32_t> graphics_family;    // optional : Ç±ÇÍÇ≈ílÇ™ë∂ç›Ç∑ÇÈÇ©Ç«Ç§Ç©ÇîªíËÇ≈Ç´ÇÈ
          bool
          isComplete();
       };
+
       class vulkan
       {
       private:
-         vulkan();
-         ~vulkan() = default;
-         void
-         create_instace();
          void
          pick_up_physical_device();
          void
          create_logical_device();
-         std::vector<const char*>
-         get_required_extensions( const bool enable_validationlayers );
          bool
-         check_extension_support( const std::vector<const char*>& extensions );
-         bool
-         check_validationlayer_support( const std::vector<const char*>& validationlayers );
+         check_validationlayer_support();
          bool
          is_device_suitable( VkPhysicalDevice device );
          int
@@ -45,28 +41,23 @@ namespace my_library
          queue_family_indices
          find_queue_familie( VkPhysicalDevice device );
 
+      public:
+         void
+         init( const GLFWwindow* window );
+
+         vulkan();
+         ~vulkan();
+
       private:
-         VkInstance               vk_instance;
-         VkDebugUtilsMessengerEXT vk_debug_messenger;
-         VkSurfaceKHR             vk_surface;
-         VkPhysicalDevice         vk_physical_device;
-         VkDevice                 vk_device;
-         VkQueue                  vk_graphics_queue;
+         VkSurfaceKHR     vk_surface;
+         VkPhysicalDevice vk_physical_device;
+         VkDevice         vk_device;
+         VkQueue          vk_graphics_queue;
 
-         debug_messenger* debug_messenger;
+         vk::DispatchLoaderDynamic dld;
 
-         CREATE_HELPER;
-         using create_helper = Impl<vulkan>;
-
-      public:
-         static vulkan*
-         create();
-
-      public:
-         void
-         init( const my_library::window::glwindow& window );
-         void
-         release();
+         std::unique_ptr<instance>     _instance;
+         std::unique_ptr<vulkan_debug> _vulkan_debug;
       };
    }    // namespace vulkan
 

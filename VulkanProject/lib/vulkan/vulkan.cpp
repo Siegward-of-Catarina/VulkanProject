@@ -1,8 +1,7 @@
 #include "vulkan.hpp"
 
-#include "../glwindow.hpp"
-#include "debug_messenger.hpp"
-#include "extensions.hpp"
+#include "instance.hpp"
+#include "vulkan_debug.hpp"
 
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
 #include <algorithm>
@@ -27,71 +26,18 @@ namespace my_library
    // vulkan::core
    namespace vulkan
    {
-      vulkan::vulkan()
-        : vk_instance { VK_NULL_HANDLE }
-        , vk_debug_messenger { VK_NULL_HANDLE }
-        , vk_physical_device { VK_NULL_HANDLE }
-        , debug_messenger { debug_messenger::create() }
-      {}
-
-      vulkan*
-      vulkan::create()
-      {
-         return new create_helper();
-      }
-
-      void
-      vulkan::create_instace()
-      {
-         if ( !validationlayers.empty()
-              && !check_validationlayer_support( validationlayers ) )    // デバッグ時のみ有効ニスル
-         {
-            throw std::runtime_error( "validation layers requested, but not available!" );
-         }
-
-         VkApplicationInfo app_info {};
-         // アプリケーションの詳細設定
-         {
-            app_info.sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-            app_info.pApplicationName   = "Hello Triangle!";
-            app_info.applicationVersion = VK_MAKE_VERSION( 1, 0, 0 );
-            app_info.pEngineName        = "No Engine";
-            app_info.engineVersion      = VK_MAKE_VERSION( 1, 0, 0 );
-            app_info.apiVersion         = VK_API_VERSION_1_0;
-         }
-
-         // インスタンス作成の詳細設定
-         VkInstanceCreateInfo create_info {};
-         create_info.sType             = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-         create_info.pApplicationInfo  = &app_info;
-         create_info.enabledLayerCount = 0;          // いったんこれで設定しておく
-         create_info.pNext             = nullptr;    // いったんこれで設定しておく
-         // mac os に対応するためこのフラグがいる
-         create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
-
-         // ==[ 拡張機能 ]==========================
-         extensions::register_for_create_info( create_info );
-
-         // ==[ 検証レイヤー ]===========================
-         if ( !validationlayers.empty() ) debug_messenger->register_for_create_info( create_info, validationlayers );
-
-         // ==[ ようやく生成 ]=============================
-         if ( vkCreateInstance( &create_info, nullptr, &vk_instance ) != VK_SUCCESS )
-         {
-            throw std::runtime_error( "failed to create instance!" );
-         }
-      }
-
       void
       vulkan::pick_up_physical_device()
       {
+#if 0
          // GPUの個数をまず取得
-         uint32_t device_count = 0;
-         vkEnumeratePhysicalDevices( vk_instance, &device_count, nullptr );
+         uint32_t                    device_count = 0;
+         std::shared_ptr<VkInstance> vk_instance { _instance->get_vk_instance() };
+         vkEnumeratePhysicalDevices( *( vk_instance.get() ), &device_count, nullptr );
          if ( device_count == 0 ) { throw std::runtime_error( "failed to find GPUs with Vulkan support!" ); }
          // GPUのリストを取得
          std::vector<VkPhysicalDevice> devices( device_count );
-         vkEnumeratePhysicalDevices( vk_instance, &device_count, devices.data() );
+         vkEnumeratePhysicalDevices( *vk_instance, &device_count, devices.data() );
 
          std::multimap<int, VkPhysicalDevice> candidates;
 
@@ -110,6 +56,7 @@ namespace my_library
          // rbegin 末尾　-> 先頭　の逆イテレータ
          if ( candidates.rbegin()->first > 0 ) { vk_physical_device = candidates.rbegin()->second; }
          else { throw std::runtime_error( "failed to find a suitable GPU!" ); }
+#endif
       }
 
       void
@@ -155,80 +102,27 @@ namespace my_library
          vkGetDeviceQueue( vk_device, indices.graphics_family.value(), 0, &vk_graphics_queue );
       }
 
-      std::vector<const char*>
-      vulkan::get_required_extensions( const bool enable_validationlayers )
-      {
-         uint32_t     glfw_extension_count = 0;
-         const char** glfw_extensions;
-         glfw_extensions = glfwGetRequiredInstanceExtensions( &glfw_extension_count );
-         std::vector<const char*> extensions( glfw_extensions, glfw_extensions + glfw_extension_count );
-         // MacOsに対応するため入れる
-         extensions.emplace_back( VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME );
-         // デバッグ時有効
-         if ( enable_validationlayers ) { extensions.emplace_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME ); }
-         return extensions;
-      }
       bool
-      vulkan::check_validationlayer_support( const std::vector<const char*>& validationlayers )
+      vulkan::check_validationlayer_support()
       {
-         // 使用可能なレイヤー数を取得
-         std::uint32_t layer_count;
-         vkEnumerateInstanceLayerProperties( &layer_count, nullptr );
-         // 使用可能レイヤーの情報を取得
-         std::vector<VkLayerProperties> availablelayers( layer_count );
-         vkEnumerateInstanceLayerProperties( &layer_count, availablelayers.data() );
-         // 使用したいレイヤーが全てサポートされているか確認
-         for ( const char* layer_name : validationlayers )
+         std::vector<vk::LayerProperties> availablelayers = vk::enumerateInstanceLayerProperties();
+
+         for ( const char* layername : validationlayers )
          {
-            bool layer_found = false;
-            for ( const auto& layer_propertys : availablelayers )
+            bool layerfound = false;
+            for ( const auto& layerproperties : availablelayers )
             {
-               if ( std::equal( std::string_view { layer_propertys.layerName }.begin(),
-                                std::string_view { layer_propertys.layerName }.end(),
-                                std::string_view { layer_name }.begin(),
-                                std::string_view { layer_name }.end() ) )
+               if ( strcmp( layername, layerproperties.layerName ) == 0 )
                {
-                  layer_found = true;
+                  layerfound = true;
                   break;
                }
             }
-            if ( !layer_found ) return false;
+            if ( !layerfound ) { return false; }
          }
          return true;
       }
-      bool
-      vulkan::check_extension_support( const std::vector<const char*>& extensions )
-      {
-         // 全てのサポートしている拡張機能の数のみ取得
-         std::uint32_t extension_count = 0;
-         vkEnumerateInstanceExtensionProperties( nullptr, &extension_count, nullptr );
 
-         // 拡張機能の情報を取得
-         std::vector<VkExtensionProperties> available_extensions( extension_count );
-         vkEnumerateInstanceExtensionProperties( nullptr, &extension_count, available_extensions.data() );
-
-         // 拡張機能の名前を一つにまとめる
-
-         // 拡張機能がサポートされているか一覧からチェック
-         for ( const char* extension : extensions )
-         {
-            bool extension_found = false;
-            for ( const auto& extension_property : available_extensions )
-            {
-               if ( std::equal( std::string_view { extension_property.extensionName }.begin(),
-                                std::string_view { extension_property.extensionName }.end(),
-                                std::string_view { extension }.begin(),
-                                std::string_view { extension }.end() ) )
-               {
-                  std::cout << extension << " is support" << std::endl;
-                  extension_found = true;
-                  break;
-               }
-            }
-            if ( !extension_found ) return false;
-         }
-         return true;
-      }
       bool
       vulkan::is_device_suitable( VkPhysicalDevice device )
       {
@@ -280,25 +174,32 @@ namespace my_library
          }
          return indices;
       }
+
       void
-      vulkan::init( const my_library::window::glwindow& window )
+      vulkan::init( const GLFWwindow* window )
       {
-         create_instace();
-         if ( !validationlayers.empty() ) debug_messenger->setup_messenger( vk_instance );
-         pick_up_physical_device();
-      }
-      void
-      vulkan::release()
-      {
-         // vkDestroyDevice( vk_device, nullptr );    // 論理デバイス
-         if ( !validationlayers.empty() )    // デバッグメッセンジャー
+
+         dld.init();
+
+         if ( !validationlayers.empty() && !check_validationlayer_support() )
          {
-            debug_messenger->release( vk_instance );
+            throw std::runtime_error( "validation layers requested, but not available!" );
          }
-         vkDestroyInstance( vk_instance, nullptr );    // Vulkanインスタンス
-         delete this;                                  // デストラクタ
+
+         _instance->init( "hello triangle", validationlayers, _vulkan_debug->messenger_create_info(), dld );
+
+         _vulkan_debug->setup_messenger( _instance->unq_vk_instance(), dld );
       }
-   }                                                   // namespace vulkan
+
+      vulkan::vulkan()
+        : vk_physical_device { VK_NULL_HANDLE }
+        , _instance { std::make_unique<instance>() }
+        , _vulkan_debug { std::make_unique<vulkan_debug>() }
+      {}
+
+      vulkan::~vulkan() {}
+   }    // namespace vulkan
+
    // vulkan::queue_family
    namespace vulkan
    {

@@ -1,47 +1,109 @@
+#define VULKAN_HPP_DISPATCH_LOADER_DYNAMIC 1
 #include "instance.hpp"
 
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
 #include <iostream>
 #include <string>
+
+VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
+
+namespace
+{
+   // extensions ------------------------------------------------
+   bool
+   check_extension_support( const std::vector<const char*>& extensions, const vk::DispatchLoaderDynamic& dld )
+   {
+      // 拡張機能の情報を取得
+      std::vector<vk::ExtensionProperties> available_extensions { vk::enumerateInstanceExtensionProperties( nullptr,
+                                                                                                            dld ) };
+
+      // 拡張機能がサポートされているか一覧からチェック
+      for ( const char* extension : extensions )
+      {
+         bool extension_found = false;
+         for ( const auto& extension_property : available_extensions )
+         {
+            if ( strcmp( extension, extension_property.extensionName ) == 0 )
+            {
+               extension_found = true;
+               break;
+            }
+         }
+         if ( !extension_found ) return false;
+      }
+      return true;
+   }
+
+   std::vector<const char*>
+   get_required_extensions( const vk::DispatchLoaderDynamic& dld )
+   {
+      uint32_t     glfw_extension_count = 0;
+      const char** glfw_extensions;
+      glfw_extensions = glfwGetRequiredInstanceExtensions( &glfw_extension_count );
+      std::vector<const char*> extensions { glfw_extensions, glfw_extensions + glfw_extension_count };
+
+#ifdef __APPLE__    // MacOsに対応するため入れる
+      extensions.emplace_back( VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME );
+#endif
+#ifdef _DEBUG
+      extensions.emplace_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+#endif
+
+      if ( !check_extension_support( extensions, dld ) )
+      {
+         throw std::runtime_error( "extensions requested, but not available!" );
+      }
+
+      return extensions;
+   }
+
+}    // namespace
+
 namespace my_library
 {
-   vulkan::instance*
-   vulkan::instance::create()
+   void
+   vulkan::instance::init( std::string                                 app_name,
+                           const std::vector<const char*>&             validationlayers,
+                           const vk::DebugUtilsMessengerCreateInfoEXT& d_info,
+                           vk::DispatchLoaderDynamic&                  dld )
    {
-      return new create_helper();
+      vk::ApplicationInfo appInfo(
+        "Hello Triangle", VK_MAKE_VERSION( 1, 0, 0 ), "No Engine", VK_MAKE_VERSION( 1, 0, 0 ), VK_API_VERSION_1_2 );
+
+      auto extensions = get_required_extensions( dld );
+
+      vk::StructureChain<vk::InstanceCreateInfo, vk::DebugUtilsMessengerCreateInfoEXT> createInfo(
+        { {}, &appInfo, validationlayers, extensions }, d_info );
+
+      vk_instance = vk::createInstanceUnique( createInfo.get<vk::InstanceCreateInfo>(), nullptr, dld );
+
+      // 全ての関数ポインタを取得する
+      dld.init( *vk_instance );
    }
-   vulkan::instance::instance() : vk_instance {VK_NULL_HANDLE}
+
+   void
+   vulkan::instance::init( std::string app_name, vk::DispatchLoaderDynamic& dld )
    {
-      VkApplicationInfo app_info {};
-      // アプリケーションの詳細設定
-      {
-         app_info.sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-         app_info.pApplicationName   = "Hello Triangle!";
-         app_info.applicationVersion = VK_MAKE_VERSION( 1, 0, 0 );
-         app_info.pEngineName        = "No Engine";
-         app_info.engineVersion      = VK_MAKE_VERSION( 1, 0, 0 );
-         app_info.apiVersion         = VK_API_VERSION_1_0;
-      }
+      vk::ApplicationInfo appInfo(
+        "Hello Triangle", VK_MAKE_VERSION( 1, 0, 0 ), "No Engine", VK_MAKE_VERSION( 1, 0, 0 ), VK_API_VERSION_1_2 );
 
-      // インスタンス作成の詳細設定
-      VkInstanceCreateInfo create_info {};
-      create_info.sType             = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-      create_info.pApplicationInfo  = &app_info;
-      create_info.enabledLayerCount = 0;          // いったんこれで設定しておく
-      create_info.pNext             = nullptr;    // いったんこれで設定しておく
-      // mac os に対応するためこのフラグがいる
-      create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+      auto extensions = get_required_extensions( dld );
 
-      // ==[ 拡張機能 ]==========================
-      extensions::register_for_create_info( create_info );
+      // in non-debug mode
+      vk::InstanceCreateInfo createInfo( {}, &appInfo, {}, extensions );
+      vk_instance = vk::createInstanceUnique( createInfo, nullptr, dld );
 
-      // ==[ 検証レイヤー ]===========================
-      if ( !validationlayers.empty() ) debug_messenger->register_for_create_info( create_info, validationlayers );
-
-      // ==[ ようやく生成 ]=============================
-      if ( vkCreateInstance( &create_info, nullptr, &vk_instance ) != VK_SUCCESS )
-      {
-         throw std::runtime_error( "failed to create instance!" );
-      }
+      // 全ての関数ポインタを取得する
+      dld.init( *vk_instance );
    }
+
+   vulkan::UniqueInstance&
+   vulkan::instance::unq_vk_instance()
+   {
+      return vk_instance;
+   }
+
+   vulkan::instance::instance() : vk_instance {} {}
+
+   vulkan::instance::~instance() {}
 }    // namespace my_library

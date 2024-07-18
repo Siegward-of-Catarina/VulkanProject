@@ -1,5 +1,8 @@
 #pragma once
-#include "create_helper.hpp"
+
+#include <memory>
+
+struct GLFWwindow;
 
 namespace my_library
 {
@@ -7,29 +10,17 @@ namespace my_library
    {
       class vulkan;
    }
-   namespace window
-   {
-      class glwindow;
-   }
+
    class renderer
    {
-   private:
+   public:
+      void
+      init( const GLFWwindow* window );
+
       renderer();
       ~renderer();
-      CREATE_HELPER;
-      using create_helper = Impl<renderer>;
 
    private:
-      vulkan::vulkan*   vulkan;
-
-   public:
-      static renderer*
-      create( );
-
-   public:
-      void
-      init();
-      void
-      release();
+      std::unique_ptr<vulkan::vulkan> _vulkan;
    };
 }    // namespace my_library

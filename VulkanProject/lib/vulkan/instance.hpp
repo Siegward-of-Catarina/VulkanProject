@@ -1,22 +1,33 @@
 #pragma once
-#include "../create_helper.hpp"
 
-#include<vector>
-#include <vulkan/vulkan.h>
+#include "common.hpp"
+
+#include <vector>
+
 namespace my_library::vulkan
 {
+
    class instance
    {
-   private:
-      VkInstance vk_instance;
-      CREATE_HELPER;
-      using create_helper = Impl<instance>;
    public:
-      static instance*
-      create();
-   private:
+      void
+      init( std::string                                 app_name,
+            const std::vector<const char*>&             validationlayers,
+            const vk::DebugUtilsMessengerCreateInfoEXT& d_info,
+            vk::DispatchLoaderDynamic&                  dld );
+
+      void
+      init( std::string app_name, vk::DispatchLoaderDynamic& dld );
+
+      
+      UniqueInstance&
+      unq_vk_instance();
+
       instance();
+      ~instance();
+
+   private:
+      UniqueInstance vk_instance;
    };
 
-}
-
+}    // namespace my_library::vulkan

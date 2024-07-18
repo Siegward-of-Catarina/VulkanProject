@@ -1,29 +1,19 @@
 #include "renderer.hpp"
 
+#include <GLFW/glfw3.h>
+
 #include "vulkan/vulkan.hpp"
+
 namespace my_library
 {
-   renderer::renderer( )
-     : vulkan { vulkan::vulkan::create() }
-   {}
+   void
+   renderer::init( const GLFWwindow* window )
+   {
+      _vulkan->init( window );
+   }
+
+   renderer::renderer() : _vulkan { std::make_unique<vulkan::vulkan>() } {}
 
    renderer::~renderer() {}
 
-   renderer*
-   renderer::create( )
-   {
-      return new create_helper( );
-   }
-
-   void
-   renderer::init()
-   {
-      // vulkan->init(*window);
-   }
-
-   void
-   renderer::release()
-   {
-      vulkan->release();
-   }
 }    // namespace my_library

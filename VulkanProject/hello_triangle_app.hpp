@@ -1,5 +1,7 @@
 #pragma once
 #include "app.hpp"
+
+#include <memory>
 namespace my_library
 {
    class renderer;
@@ -7,7 +9,7 @@ namespace my_library
    {
       class glwindow;
    }
-}
+}    // namespace my_library
 namespace my_app
 {
    class hello_triangle_app : public core::app
@@ -18,13 +20,15 @@ namespace my_app
       void
       main_loop() override;
       void
-                             cleanup() override;
-      my_library::window::glwindow* window;
-      my_library::renderer* renderer;
+      cleanup() override;
 
    public:
       hello_triangle_app();
       ~hello_triangle_app();
+
+   private:
+      std::unique_ptr<my_library::window::glwindow> _window;
+      std::unique_ptr<my_library::renderer>         _renderer;
    };
 
 }    // namespace my_app

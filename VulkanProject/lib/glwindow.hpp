@@ -1,32 +1,20 @@
 #pragma once
-#include "create_helper.hpp"
 
 #include <iostream>
+#include <memory>
+
 struct GLFWwindow;
 struct GLFWmonitor;
 namespace my_library::window
 {
+    struct gl_deleter
+    {
+       void
+       operator()( GLFWwindow* ptr );
+    };
 
    class glwindow
    {
-   private:
-      explicit glwindow( const std::uint32_t width, const std::uint32_t height, const char* title );
-      glwindow() = delete;
-      ~glwindow();
-
-      CREATE_HELPER;
-      using create_helper = Impl<glwindow>;
-
-   private:
-      GLFWwindow*         glfw_window;
-      const std::uint32_t width;
-      const std::uint32_t height;
-      const char*         title;
-
-   public:
-      static glwindow*
-      create( const std::uint32_t width, const std::uint32_t height, const char* title );
-
    public:
       void
       init();
@@ -34,15 +22,24 @@ namespace my_library::window
       close();
       void
       pool_event();
-      void
-      release();
-
       const GLFWwindow*
-      get_window();
+      raw_glfwW_ptr();
       const std::uint32_t
-      get_width();
+      width();
       const std::uint32_t
-      get_height();
+      height();
+
+      explicit glwindow( const std::uint32_t width, const std::uint32_t height, const char* title );
+      glwindow() = delete;
+      ~glwindow();
+
+   private:
+
+      std::unique_ptr<GLFWwindow, gl_deleter> _glfw_window;
+
+      const std::uint32_t _width;
+      const std::uint32_t _height;
+      const char*         _title;
    };
 
 }    // namespace my_library::window

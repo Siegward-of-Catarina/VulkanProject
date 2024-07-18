@@ -8,28 +8,27 @@ namespace my_app
    void
    hello_triangle_app::init()
    {
-      window->init();
-      renderer->init();
+      _window->init();
+      _renderer->init( _window->raw_glfwW_ptr() );
    }
 
    void
    hello_triangle_app::main_loop()
    {
-      while ( !window->close() ) { window->pool_event(); }
+      while ( !_window->close() ) { _window->pool_event(); }
    }
 
    void
    hello_triangle_app::cleanup()
    {
-      renderer->release();
-      window->release();
    }
 
    hello_triangle_app::hello_triangle_app()
      : app {}
-     , window { my_library::window::glwindow::create( 800, 600, "vulkan" ) }
-     , renderer { my_library::renderer::create() }
+     , _window { std::make_unique<my_library::window::glwindow>( 800, 600, "vulkan" ) }
+     , _renderer { std::make_unique<my_library::renderer>() }
    {}
 
    hello_triangle_app::~hello_triangle_app() {}
+
 }    // namespace my_app
