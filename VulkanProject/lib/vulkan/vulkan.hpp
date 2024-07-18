@@ -58,6 +58,7 @@ namespace my_library
 
          std::unique_ptr<instance>     _instance;
          std::unique_ptr<vulkan_debug> _vulkan_debug;
+
       };
    }    // namespace vulkan
 

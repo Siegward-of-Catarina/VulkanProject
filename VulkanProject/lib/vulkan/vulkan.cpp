@@ -32,7 +32,6 @@ namespace my_library
 #if 0
          // GPUの個数をまず取得
          uint32_t                    device_count = 0;
-         std::shared_ptr<VkInstance> vk_instance { _instance->get_vk_instance() };
          vkEnumeratePhysicalDevices( *( vk_instance.get() ), &device_count, nullptr );
          if ( device_count == 0 ) { throw std::runtime_error( "failed to find GPUs with Vulkan support!" ); }
          // GPUのリストを取得
@@ -99,7 +98,7 @@ namespace my_library
          }
 
          // キューをハンドルに取得
-         vkGetDeviceQueue( vk_device, indices.graphics_family.value(), 0, &vk_graphics_queue );
+         vkGetDeviceQueue( vk_device, indices.graphics_family.value(), 0, &vk_graphics_queue ); 
       }
 
       bool
@@ -130,6 +129,7 @@ namespace my_library
 
          return indices.isComplete();
       }
+
       int
       vulkan::rate_device_suitability( VkPhysicalDevice device )
       {
@@ -153,6 +153,7 @@ namespace my_library
 
          return score;
       }
+
       queue_family_indices
       vulkan::find_queue_familie( VkPhysicalDevice device )
       {

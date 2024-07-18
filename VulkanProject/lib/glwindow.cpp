@@ -3,7 +3,7 @@
 #define GLFW_INCLUDE_VULKAN    // GLFW には独自の定義が含まれ、それとともに Vulkan ヘッダーが自動的にロード
 #include <GLFW/glfw3.h>
 
-namespace my_library::window //deleter
+namespace my_library::window    // deleter
 {
    void
    gl_deleter::operator()( GLFWwindow* ptr )
@@ -11,9 +11,9 @@ namespace my_library::window //deleter
       glfwDestroyWindow( ptr );
       glfwTerminate();
    }
-}
+}    // namespace my_library::window
 
-namespace my_library::window //glwindow
+namespace my_library::window    // glwindow
 {
    void
    glwindow::init()
@@ -27,7 +27,9 @@ namespace my_library::window //glwindow
       glfwWindowHint( GLFW_RESIZABLE, GLFW_FALSE );
 
       // ウィンドウ初期化
-      _glfw_window.reset( glfwCreateWindow( _width, _height, _title, nullptr, nullptr ) );
+      //_glfw_window.reset( glfwCreateWindow( _width, _height, _title, nullptr, nullptr ) );
+      std::unique_ptr<GLFWwindow, gl_deleter> w { glfwCreateWindow( _width, _height, _title, nullptr, nullptr ) };
+      _glfw_window = std::move( w );
    }
 
    int
@@ -61,7 +63,7 @@ namespace my_library::window //glwindow
    {
       return _height;
    }
-   
+
    glwindow::glwindow( const std::uint32_t width, const std::uint32_t height, const char* title )
      : _width { width }, _height { height }, _title { title }
    {}
