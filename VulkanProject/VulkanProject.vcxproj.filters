@@ -9,6 +9,8 @@
     <ClCompile Include="lib\vulkan\instance.cpp" />
     <ClCompile Include="lib\renderer.cpp" />
     <ClCompile Include="lib\vulkan\vulkan_debug.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="lib\vulkan\pyhsical_device.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hpp" />
@@ -20,5 +22,7 @@
     <ClInclude Include="lib\renderer.hpp" />
     <ClInclude Include="lib\vulkan\vulkan_debug.hpp" />
     <ClInclude Include="lib\vulkan\common.hpp" />
+    <ClInclude Include="pch.hpp" />
+    <ClInclude Include="lib\vulkan\pyhsical_device.hpp" />
   </ItemGroup>
 </Project>
