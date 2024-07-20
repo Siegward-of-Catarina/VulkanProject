@@ -20,14 +20,14 @@ namespace my_library::vulkan
       init( std::string app_name, vk::DispatchLoaderDynamic& dld );
 
       
-      UniqueInstance&
-      unq_vk_instance();
+      unq_vk_instance&
+      vk_instance();
 
       instance();
       ~instance();
 
    private:
-      UniqueInstance vk_instance;
+      unq_vk_instance _vk_instance;
    };
 
 }    // namespace my_library::vulkan

@@ -1,6 +1,7 @@
 #include "vulkan.hpp"
 
 #include "instance.hpp"
+#include "physicaldevice.hpp"
 #include "vulkan_debug.hpp"
 
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
@@ -98,7 +99,7 @@ namespace my_library
          }
 
          // キューをハンドルに取得
-         vkGetDeviceQueue( vk_device, indices.graphics_family.value(), 0, &vk_graphics_queue ); 
+         vkGetDeviceQueue( vk_device, indices.graphics_family.value(), 0, &vk_graphics_queue );
       }
 
       bool
@@ -182,20 +183,25 @@ namespace my_library
 
          dld.init();
 
-         if ( !validationlayers.empty() && !check_validationlayer_support() )
+         if ( !validationlayers.empty() )
          {
-            throw std::runtime_error( "validation layers requested, but not available!" );
+            if ( !check_validationlayer_support() )
+                throw std::runtime_error( "validation layers requested, but not available!" );
+
+            _instance->init( "hello triangle", validationlayers, _vulkan_debug->messenger_create_info(), dld );
+            _vulkan_debug->setup_messenger( _instance->vk_instance(), dld );
+
          }
+         else { _instance->init( "hello triangle", dld ); }
 
-         _instance->init( "hello triangle", validationlayers, _vulkan_debug->messenger_create_info(), dld );
-
-         _vulkan_debug->setup_messenger( _instance->unq_vk_instance(), dld );
+         _physicaldevice->pick_physical_device( _instance->vk_instance(), dld );
       }
 
       vulkan::vulkan()
         : vk_physical_device { VK_NULL_HANDLE }
         , _instance { std::make_unique<instance>() }
         , _vulkan_debug { std::make_unique<vulkan_debug>() }
+        , _physicaldevice { std::make_unique<physicaldevice>() }
       {}
 
       vulkan::~vulkan() {}

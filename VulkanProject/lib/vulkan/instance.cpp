@@ -1,4 +1,3 @@
-#define VULKAN_HPP_DISPATCH_LOADER_DYNAMIC 1
 #include "instance.hpp"
 
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
@@ -75,10 +74,10 @@ namespace my_library
       vk::StructureChain<vk::InstanceCreateInfo, vk::DebugUtilsMessengerCreateInfoEXT> createInfo(
         { {}, &appInfo, validationlayers, extensions }, d_info );
 
-      vk_instance = vk::createInstanceUnique( createInfo.get<vk::InstanceCreateInfo>(), nullptr, dld );
+      _vk_instance = vk::createInstanceUnique( createInfo.get<vk::InstanceCreateInfo>(), nullptr, dld );
 
       // 全ての関数ポインタを取得する
-      dld.init( *vk_instance );
+      dld.init( *_vk_instance );
    }
 
    void
@@ -91,19 +90,19 @@ namespace my_library
 
       // in non-debug mode
       vk::InstanceCreateInfo createInfo( {}, &appInfo, {}, extensions );
-      vk_instance = vk::createInstanceUnique( createInfo, nullptr, dld );
+      _vk_instance = vk::createInstanceUnique( createInfo, nullptr, dld );
 
       // 全ての関数ポインタを取得する
-      dld.init( *vk_instance );
+      dld.init( *_vk_instance );
    }
 
-   vulkan::UniqueInstance&
-   vulkan::instance::unq_vk_instance()
+   vulkan::unq_vk_instance&
+   vulkan::instance::vk_instance()
    {
-      return vk_instance;
+      return _vk_instance;
    }
 
-   vulkan::instance::instance() : vk_instance {} {}
+   vulkan::instance::instance() : _vk_instance {} {}
 
    vulkan::instance::~instance() {}
 }    // namespace my_library

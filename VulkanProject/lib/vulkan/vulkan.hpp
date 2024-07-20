@@ -12,6 +12,7 @@ namespace my_library
    {
       class instance;
       class vulkan_debug;
+      class physicaldevice;
    }    // namespace vulkan
 }    // namespace my_library
 namespace my_library
@@ -58,6 +59,7 @@ namespace my_library
 
          std::unique_ptr<instance>     _instance;
          std::unique_ptr<vulkan_debug> _vulkan_debug;
+         std::unique_ptr<physicaldevice> _physicaldevice;
 
       };
    }    // namespace vulkan

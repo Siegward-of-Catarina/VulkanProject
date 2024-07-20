@@ -18,12 +18,12 @@ namespace my_library::vulkan
       messenger_create_info();
 
       void
-      setup_messenger( UniqueInstance& instance, vk::DispatchLoaderDynamic& dld );
+      setup_messenger( unq_vk_instance& instance, vk::DispatchLoaderDynamic& dld );
 
       vulkan_debug() {}
       ~vulkan_debug() {}
 
    private:
-      UniqueDebugUtilsMessengerEXT vk_debug_messenger;
+      unq_vk_debugutils_messenger_ext _vk_debug_messenger;
    };
 }    // namespace my_library::vulkan

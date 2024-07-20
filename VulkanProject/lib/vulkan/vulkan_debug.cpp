@@ -30,9 +30,9 @@ namespace my_library::vulkan
    }
 
    void
-   vulkan_debug::setup_messenger( UniqueInstance& instance, vk::DispatchLoaderDynamic& dld )
+   vulkan_debug::setup_messenger( unq_vk_instance& instance, vk::DispatchLoaderDynamic& dld )
    {
-      vk_debug_messenger = instance->createDebugUtilsMessengerEXTUnique( messenger_create_info(), nullptr, dld );
+      _vk_debug_messenger = instance->createDebugUtilsMessengerEXTUnique( messenger_create_info(), nullptr, dld );
    }
 
 
