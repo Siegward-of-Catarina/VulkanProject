@@ -1,5 +1,5 @@
 #pragma once
-#include "common.hpp"
+#include "vk_object_types.hpp"
 namespace my_library::vulkan
 {
    class physicaldevice
@@ -11,6 +11,9 @@ namespace my_library::vulkan
    public:
       void
       pick_physical_device( unq_vk_instance& instance, vk::DispatchLoaderDynamic& dld );
+      
+      vk_physicaldevice&
+      vk_obj();
 
       physicaldevice();
       ~physicaldevice();

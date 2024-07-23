@@ -10,12 +10,12 @@ namespace
 {
    // extensions ------------------------------------------------
    bool
-   check_extension_support( const std::vector<const char*>& extensions, const vk::DispatchLoaderDynamic& dld )
+   check_extension_support( const std::vector<const char*>&              extensions,
+                            const my_library::vulkan::vk_dispatchloader_dynamic& dld )
    {
       // 拡張機能の情報を取得
       std::vector<vk::ExtensionProperties> available_extensions { vk::enumerateInstanceExtensionProperties( nullptr,
                                                                                                             dld ) };
-
       // 拡張機能がサポートされているか一覧からチェック
       for ( const char* extension : extensions )
       {
@@ -34,7 +34,7 @@ namespace
    }
 
    std::vector<const char*>
-   get_required_extensions( const vk::DispatchLoaderDynamic& dld )
+   get_required_extensions( const my_library::vulkan::vk_dispatchloader_dynamic& dld )
    {
       uint32_t     glfw_extension_count = 0;
       const char** glfw_extensions;
@@ -63,8 +63,8 @@ namespace my_library
    void
    vulkan::instance::init( std::string                                 app_name,
                            const std::vector<const char*>&             validationlayers,
-                           const vk::DebugUtilsMessengerCreateInfoEXT& d_info,
-                           vk::DispatchLoaderDynamic&                  dld )
+                           const vk_debugutils_messenger_createinfo_ext& d_info,
+                           vk_dispatchloader_dynamic&                  dld )
    {
       vk::ApplicationInfo appInfo(
         "Hello Triangle", VK_MAKE_VERSION( 1, 0, 0 ), "No Engine", VK_MAKE_VERSION( 1, 0, 0 ), VK_API_VERSION_1_2 );
@@ -81,7 +81,7 @@ namespace my_library
    }
 
    void
-   vulkan::instance::init( std::string app_name, vk::DispatchLoaderDynamic& dld )
+   vulkan::instance::init( std::string app_name, vk_dispatchloader_dynamic& dld )
    {
       vk::ApplicationInfo appInfo(
         "Hello Triangle", VK_MAKE_VERSION( 1, 0, 0 ), "No Engine", VK_MAKE_VERSION( 1, 0, 0 ), VK_API_VERSION_1_2 );
@@ -97,7 +97,7 @@ namespace my_library
    }
 
    vulkan::unq_vk_instance&
-   vulkan::instance::vk_instance()
+   vulkan::instance::vk_obj()
    {
       return _vk_instance;
    }

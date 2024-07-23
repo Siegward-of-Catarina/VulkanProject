@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common.hpp"
+#include "vk_object_types.hpp"
 
 #include <vector>
 
@@ -11,17 +11,16 @@ namespace my_library::vulkan
    {
    public:
       void
-      init( std::string                                 app_name,
-            const std::vector<const char*>&             validationlayers,
-            const vk::DebugUtilsMessengerCreateInfoEXT& d_info,
-            vk::DispatchLoaderDynamic&                  dld );
+      init( std::string                                   app_name,
+            const std::vector<const char*>&               validationlayers,
+            const vk_debugutils_messenger_createinfo_ext& d_info,
+            vk_dispatchloader_dynamic&                    dld );
 
       void
-      init( std::string app_name, vk::DispatchLoaderDynamic& dld );
+      init( std::string app_name, vk_dispatchloader_dynamic& dld );
 
-      
       unq_vk_instance&
-      vk_instance();
+      vk_obj();
 
       instance();
       ~instance();

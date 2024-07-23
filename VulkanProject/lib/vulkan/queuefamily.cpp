@@ -1,24 +1,36 @@
 #include "queuefamily.hpp"
 
-namespace my_library::vulkan
+namespace my_library::vulkan::queuefamily
 {
    bool
-   queuefamily_indices::is_complete()
+   indices::is_complete()
    {
-      return graphcsfamily.has_value();
+      return graphicsfamily.has_value();
    }
 
-   queuefamily_indices
-   queuefamily_indices::find_queuefamily( const vk_physicaldevice& device )
+   std::optional<uint32_t>
+   indices::select( const types& type )
    {
-      queuefamily_indices                    indices;
+      assert( type < types::COUNT );
+      switch ( type )
+      {
+         case types::GRAPHICS_QUEUE : return this->graphicsfamily;
+         case types::PRESENT_QUEUE : return 1;
+         default : return my_library::utl::e_to_b( types::COUNT );
+      }
+   }
+
+   indices
+   find_queuefamily( const vk_physicaldevice& device )
+   {
+      queuefamily::indices                   indices;
       std::vector<vk::QueueFamilyProperties> queuefamilyes = device.getQueueFamilyProperties();
 
       int i { 0 };
       for ( const auto& queuefamily : queuefamilyes )
       {
          // デバイスがグラフィック関連のコマンドに対応しているか検索
-         if ( queuefamily.queueFlags & vk::QueueFlagBits::eGraphics ) { indices.graphcsfamily = i; }
+         if ( queuefamily.queueFlags & vk::QueueFlagBits::eGraphics ) { indices.graphicsfamily = i; }
          // 見つかり次第終了
          if ( indices.is_complete() ) { break; }
 
@@ -26,4 +38,4 @@ namespace my_library::vulkan
       }
       return indices;
    }
-}    // namespace my_library::vulkan
+}    // namespace my_library::vulkan::queuefamily

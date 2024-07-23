@@ -1,16 +1,28 @@
 #pragma once
-#include"common.hpp"
+#include "vk_object_types.hpp"
+#include "utilities.hpp"
 
-#include<optional>
-
-namespace my_library::vulkan
+#include <optional>
+namespace my_library::vulkan::queuefamily
 {
-   struct queuefamily_indices
+   enum class types
    {
-      std::optional<uint32_t> graphcsfamily;
+      GRAPHICS_QUEUE,
+      PRESENT_QUEUE,
+      COUNT
+   };
+
+   struct indices
+   {
+      std::optional<uint32_t> graphicsfamily;
       bool
       is_complete();
-      queuefamily_indices
-      find_queuefamily( const vk_physicaldevice& device );
+
+      std::optional<uint32_t>
+      select( const types& type );
    };
-}    // namespace my_libraray_vulkan
+
+   indices
+   find_queuefamily( const vk_physicaldevice& device );
+
+}    // namespace my_library::vulkan::queuefamily

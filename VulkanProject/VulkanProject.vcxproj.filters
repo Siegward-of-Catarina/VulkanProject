@@ -10,7 +10,10 @@
     <ClCompile Include="lib\renderer.cpp" />
     <ClCompile Include="lib\vulkan\vulkan_debug.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="lib\vulkan\pyhsical_device.cpp" />
+    <ClCompile Include="lib\vulkan\logicaldevice.cpp" />
+    <ClCompile Include="lib\vulkan\physicaldevice.cpp" />
+    <ClCompile Include="lib\vulkan\queuefamily.cpp" />
+    <ClCompile Include="lib\vulkan\device.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hpp" />
@@ -21,8 +24,12 @@
     <ClInclude Include="lib\vulkan\instance.hpp" />
     <ClInclude Include="lib\renderer.hpp" />
     <ClInclude Include="lib\vulkan\vulkan_debug.hpp" />
-    <ClInclude Include="lib\vulkan\common.hpp" />
+    <ClInclude Include="lib\vulkan\vk_object_types.hpp" />
     <ClInclude Include="pch.hpp" />
-    <ClInclude Include="lib\vulkan\pyhsical_device.hpp" />
+    <ClInclude Include="lib\vulkan\logicaldevice.hpp" />
+    <ClInclude Include="lib\vulkan\physicaldevice.hpp" />
+    <ClInclude Include="lib\vulkan\queuefamily.hpp" />
+    <ClInclude Include="lib\vulkan\utilities.hpp" />
+    <ClInclude Include="lib\vulkan\device.hpp" />
   </ItemGroup>
 </Project>
