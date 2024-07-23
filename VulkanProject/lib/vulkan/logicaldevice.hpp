@@ -1,5 +1,12 @@
 #pragma once
 #include "vk_object_types.hpp"
+namespace my_library
+{
+   namespace vulkan
+   {
+      class physicaldevice;
+   }    // namespace vulkan
+}    // namespace my_library
 
 namespace my_library::vulkan
 {
@@ -9,14 +16,18 @@ namespace my_library::vulkan
 
    public:
       void
-      init( const vk_physicaldevice&        physicaldevice,
+      init( const std::unique_ptr<physicaldevice>& physicaldevice,
             const std::vector<const char*>& validationlayers,
-            vk_dispatchloader_dynamic&      dld );
+            const vk_dispatchloader_dynamic&      dld );
       void
-      init( const vk_physicaldevice& physicaldevice, vk_dispatchloader_dynamic& dld );
+      init( const std::unique_ptr<physicaldevice>& physicaldevice, const vk_dispatchloader_dynamic& dld );
+
+      const vk_queue&
+      get_queue( const uint32_t& queuefamily_idx, const vk_dispatchloader_dynamic& dld );
 
       unq_vk_device&
       vk_obj();
+
       logicaldevice();
       ~logicaldevice();
 

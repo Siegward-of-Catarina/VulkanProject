@@ -1,24 +1,26 @@
 #include "physicaldevice.hpp"
 
-#include "queuefamily.hpp"
 namespace my_library::vulkan
 {
    bool
-   physicaldevice::is_device_suitable( const vk_physicaldevice& device )
+   physicaldevice::is_device_suitable( const vk_physicaldevice&         device,
+                                       const unq_vk_surface&            surface,
+                                       const vk_dispatchloader_dynamic& dld )
    {
-      queuefamily::indices indices { queuefamily::find_queuefamily( device ) };
-      return indices.is_complete();
+      _indices = queuefamily::find_queuefamily( device, surface, dld );
+      return _indices.is_complete();
    }
    void
-   physicaldevice::pick_physical_device( unq_vk_instance& instance, vk::DispatchLoaderDynamic& dld )
+   physicaldevice::pick_physical_device( const unq_vk_instance&           instance,
+                                         const unq_vk_surface&            surface,
+                                         const vk_dispatchloader_dynamic& dld )
    {
-
       std::vector<vk::PhysicalDevice> devices = instance->enumeratePhysicalDevices( dld );
 
       // GPUのリストから適切なデバイスを取得
       for ( const auto& device : devices )
       {
-         if ( is_device_suitable( device ) )
+         if ( is_device_suitable( device, surface, dld ) )
          {
             _physical_device = device;
             break;
@@ -31,6 +33,12 @@ namespace my_library::vulkan
    physicaldevice::vk_obj()
    {
       return _physical_device;
+   }
+   const uint32_t&
+   physicaldevice::valid_queuefamily_idx( const queuefamily::types& type )
+   {
+      assert( type < queuefamily::types::COUNT );
+      return _indices.select( type ).value();
    }
    physicaldevice::physicaldevice() {}
    physicaldevice::~physicaldevice() {}

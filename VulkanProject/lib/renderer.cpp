@@ -7,7 +7,7 @@
 namespace my_library
 {
    void
-   renderer::init( const GLFWwindow* window )
+   renderer::init( GLFWwindow* window )
    {
       _vulkan->init( window );
    }

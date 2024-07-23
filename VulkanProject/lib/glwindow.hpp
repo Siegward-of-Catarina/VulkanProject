@@ -22,7 +22,7 @@ namespace my_library::window
       close();
       void
       pool_event();
-      const GLFWwindow*
+      GLFWwindow*
       raw_glfwW_ptr();
       const std::uint32_t
       width();

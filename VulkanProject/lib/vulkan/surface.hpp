@@ -9,13 +9,13 @@ namespace my_library::vulkan
 
    public:
       void
-      init(const unq_vk_instance& instance,
-            GLFWwindow* window);
+      init( const unq_vk_instance& instance, GLFWwindow* window );
       unq_vk_surface&
       vk_obj();
       surface();
       ~surface();
+
    private:
       unq_vk_surface _surface;
    };
-}
+}    // namespace my_library::vulkan

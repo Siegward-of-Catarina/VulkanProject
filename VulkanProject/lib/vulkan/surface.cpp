@@ -11,7 +11,7 @@ namespace my_library::vulkan
       {
          throw std::runtime_error( "failed to create window surface!" );
       }
-      //_surface = vk::UniqueSurfaceKHR( surface, {instance.get() } ); 
+      _surface = vk::UniqueSurfaceKHR( surface, { instance.get() } );
    }
 
    unq_vk_surface&

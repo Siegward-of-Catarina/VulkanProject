@@ -15,7 +15,7 @@ namespace my_library
    {
    public:
       void
-      init( const GLFWwindow* window );
+      init( GLFWwindow* window );
 
       renderer();
       ~renderer();

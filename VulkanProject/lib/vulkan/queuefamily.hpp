@@ -15,6 +15,7 @@ namespace my_library::vulkan::queuefamily
    struct indices
    {
       std::optional<uint32_t> graphicsfamily;
+      std::optional<uint32_t> presentfamily;
       bool
       is_complete();
 
@@ -23,6 +24,6 @@ namespace my_library::vulkan::queuefamily
    };
 
    indices
-   find_queuefamily( const vk_physicaldevice& device );
+   find_queuefamily( const vk_physicaldevice& device, const unq_vk_surface& surface, const vk_dispatchloader_dynamic& dld );
 
 }    // namespace my_library::vulkan::queuefamily

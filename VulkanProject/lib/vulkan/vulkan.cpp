@@ -1,9 +1,12 @@
 #include "vulkan.hpp"
 
-#include "device.hpp"
 #include "instance.hpp"
-#include "vulkan_debug.hpp"
+#include "logicaldevice.hpp"
+#include "physicaldevice.hpp"
 #include "queuefamily.hpp"
+#include "surface.hpp"
+#include "vulkan_debug.hpp"
+
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
 
 namespace
@@ -45,7 +48,7 @@ namespace my_library
       }
 
       void
-      vulkan::init( const GLFWwindow* window )
+      vulkan::init( GLFWwindow* window )
       {
 
          dld.init();
@@ -57,21 +60,28 @@ namespace my_library
 
             _instance->init( "hello triangle", validationlayers, _vulkan_debug->messenger_create_info(), dld );
             _vulkan_debug->setup_messenger( _instance->vk_obj(), dld );
-            _device->init( _instance->vk_obj(), validationlayers, dld );
+            _surface->init( _instance->vk_obj(), window );
+            _physicaldevice->pick_physical_device( _instance->vk_obj(), _surface->vk_obj(), dld );
+            _logicaldevice->init( _physicaldevice, validationlayers, dld );
          }
          else
          {
             _instance->init( "hello triangle", dld );
-            _device->init( _instance->vk_obj(), dld );
+            _surface->init( _instance->vk_obj(), window );
+            _physicaldevice->pick_physical_device( _instance->vk_obj(), _surface->vk_obj(), dld );
+            _logicaldevice->init( _physicaldevice, dld );
          }
 
-         _graphics_queue = _device->get_queue( queuefamily::types::GRAPHICS_QUEUE, dld );
+         _graphics_queue = _logicaldevice->get_queue(
+           _physicaldevice->valid_queuefamily_idx( queuefamily::types::GRAPHICS_QUEUE ), dld );
       }
 
       vulkan::vulkan()
         : _instance { std::make_unique<instance>() }
         , _vulkan_debug { std::make_unique<vulkan_debug>() }
-        , _device { std::make_unique<device>() }
+        , _surface { std::make_unique<surface>() }
+        , _physicaldevice { std::make_unique<physicaldevice>() }
+        , _logicaldevice { std::make_unique<logicaldevice>() }
       {}
 
       vulkan::~vulkan() {}

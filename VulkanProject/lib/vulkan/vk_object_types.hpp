@@ -20,5 +20,5 @@ namespace my_library::vulkan
    //-----------------------------------------
    using vk_queue = vk::Queue;
    //-----------------------------------------
-   using unq_vk_surface = vk::UniqueHandle<vk::SurfaceKHR, vk_dispatchloader_dynamic>;
+   using unq_vk_surface = vk::UniqueSurfaceKHR; //vk::UniqueHandle<vk::SurfaceKHR, vk_dispatchloader_dynamic>;
 }    // namespace my_library::vulkan

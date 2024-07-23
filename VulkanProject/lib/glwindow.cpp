@@ -44,7 +44,7 @@ namespace my_library::window    // glwindow
       glfwPollEvents();
    }
 
-   const GLFWwindow*
+   GLFWwindow*
    glwindow::raw_glfwW_ptr()
    {
       if ( !_glfw_window ) { throw std::runtime_error( "glfw_window.get() is nullptr" ); }
