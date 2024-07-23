@@ -74,6 +74,9 @@ namespace my_library
 
          _graphics_queue = _logicaldevice->get_queue(
            _physicaldevice->valid_queuefamily_idx( queuefamily::types::GRAPHICS_QUEUE ), dld );
+
+         _present_queue = _logicaldevice->get_queue(
+           _physicaldevice->valid_queuefamily_idx( queuefamily::types::PRESENT_QUEUE ), dld );
       }
 
       vulkan::vulkan()

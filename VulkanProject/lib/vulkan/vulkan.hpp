@@ -37,6 +37,7 @@ namespace my_library
       private:
          vk_dispatchloader_dynamic dld;
          vk_queue                      _graphics_queue;
+         vk_queue                      _present_queue;
          std::unique_ptr<instance>     _instance;
          std::unique_ptr<vulkan_debug> _vulkan_debug;
          std::unique_ptr<surface> _surface;
