@@ -1,5 +1,7 @@
 #include "surface.hpp"
 
+#include "utilities.hpp"
+
 #include <GLFW/glfw3.h>
 namespace my_library::vulkan
 {
@@ -7,11 +9,13 @@ namespace my_library::vulkan
    surface::init( const unq_vk_instance& instance, GLFWwindow* window )
    {
       VkSurfaceKHR surface;
-      if ( glfwCreateWindowSurface( VkInstance( instance.get() ), window, nullptr, &surface ) != VK_SUCCESS )
+      if ( glfwCreateWindowSurface( static_cast<VkInstance>( instance.get() ), window, nullptr, &surface )
+           != VK_SUCCESS )
       {
          throw std::runtime_error( "failed to create window surface!" );
       }
-      _surface = vk::UniqueSurfaceKHR( surface, { instance.get() } );
+      _surface = unq_vk_surface( surface, { instance.get() } );
+      utl::log( "window surface created." );
    }
 
    unq_vk_surface&

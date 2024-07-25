@@ -15,7 +15,7 @@ namespace my_library::vulkan
                                          const unq_vk_surface&            surface,
                                          const vk_dispatchloader_dynamic& dld )
    {
-      std::vector<vk::PhysicalDevice> devices = instance->enumeratePhysicalDevices( dld );
+      std::vector<vk_physicaldevice> devices = instance->enumeratePhysicalDevices( dld );
 
       // GPUのリストから適切なデバイスを取得
       for ( const auto& device : devices )
@@ -26,7 +26,7 @@ namespace my_library::vulkan
             break;
          }
       }
-      // rbegin 末尾　-> 先頭　の逆イテレータ
+
       if ( !_physical_device ) { throw std::runtime_error( "failed to find a suitable GPU!" ); }
    }
    vk_physicaldevice&

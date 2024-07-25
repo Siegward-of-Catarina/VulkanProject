@@ -17,10 +17,7 @@ namespace my_library::vulkan
    public:
       void
       init( const std::unique_ptr<physicaldevice>& physicaldevice,
-            const std::vector<const char*>& validationlayers,
             const vk_dispatchloader_dynamic&      dld );
-      void
-      init( const std::unique_ptr<physicaldevice>& physicaldevice, const vk_dispatchloader_dynamic& dld );
 
       const vk_queue
       get_queue( const uint32_t& queuefamily_idx, const vk_dispatchloader_dynamic& dld );

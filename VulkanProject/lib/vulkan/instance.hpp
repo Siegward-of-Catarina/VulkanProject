@@ -12,7 +12,7 @@ namespace my_library::vulkan
    public:
       void
       init( const std::string                                   app_name,
-            const vk_debugutils_messenger_createinfo_ext& d_info,
+            const vk_dbg_utl_msgr_createinfo_ext& d_info,
             vk_dispatchloader_dynamic&                    dld );
 
       void

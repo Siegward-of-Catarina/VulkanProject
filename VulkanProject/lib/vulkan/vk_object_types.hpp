@@ -8,12 +8,21 @@ namespace my_library::vulkan
    template<typename... chain_elements>
    using vk_structure_chain = vk::StructureChain<chain_elements...>;
    using vk_applicationinfo = vk::ApplicationInfo;
-   //----------------------------------------
+   //----instance------------------------------------
    using vk_instance_createinfo = vk::InstanceCreateInfo;
    using unq_vk_instance = vk::UniqueHandle<vk::Instance, vk_dispatchloader_dynamic>;
-   //----------------------------------------
-   using vk_debugutils_messenger_createinfo_ext = vk::DebugUtilsMessengerCreateInfoEXT;
-   using unq_vk_debugutils_messenger_ext = vk::UniqueHandle<vk::DebugUtilsMessengerEXT, vk_dispatchloader_dynamic>;
+   //----extension-----------------------------------
+   using vk_ext_properties = vk::ExtensionProperties;
+   //----debug utile---------------------------------
+   using vk_dbg_utl_msg_severity_flags_ext = vk::DebugUtilsMessageSeverityFlagsEXT;
+   using vk_dbg_utl_msg_severity_flag_bits_ext = vk::DebugUtilsMessageSeverityFlagBitsEXT;
+
+   using vk_dbg_utl_msg_type_flags_ext = vk::DebugUtilsMessageTypeFlagsEXT;
+   using vk_dbg_utl_msg_type_flag_bits_ext = vk::DebugUtilsMessageTypeFlagBitsEXT;
+
+   using vk_dbg_utl_msgr_callback_data_ext = vk::DebugUtilsMessengerCallbackDataEXT;
+   using vk_dbg_utl_msgr_createinfo_ext = vk::DebugUtilsMessengerCreateInfoEXT;
+   using unq_vk_dbg_utl_msgr_ext = vk::UniqueHandle<vk::DebugUtilsMessengerEXT, vk_dispatchloader_dynamic>;
    //----------------------------------------
    using vk_physicaldevice          = vk::PhysicalDevice;
    using vk_physicaldevice_features = vk::PhysicalDeviceFeatures;

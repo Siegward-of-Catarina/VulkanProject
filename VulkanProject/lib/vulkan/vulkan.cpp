@@ -6,6 +6,7 @@
 #include "queuefamily.hpp"
 #include "surface.hpp"
 #include "vulkan_debug.hpp"
+#include "validationlayer.hpp"
 
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
 
@@ -53,16 +54,13 @@ namespace my_library
 
          dld.init();
 
-         if ( !validationlayers.empty() )
+         if ( !get_validationlayers().empty() )
          {
-            if ( !check_validationlayer_support() )
-               throw std::runtime_error( "validation layers requested, but not available!" );
-
             _instance->init( "hello triangle", _vulkan_debug->messenger_create_info(), dld );
             _vulkan_debug->setup_messenger( _instance->vk_obj(), dld );
             _surface->init( _instance->vk_obj(), window );
             _physicaldevice->pick_physical_device( _instance->vk_obj(), _surface->vk_obj(), dld );
-            _logicaldevice->init( _physicaldevice, validationlayers, dld );
+            _logicaldevice->init( _physicaldevice, dld );
          }
          else
          {

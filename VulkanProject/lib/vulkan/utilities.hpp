@@ -18,14 +18,19 @@ namespace my_library::utl
       static_assert( std::is_enum<Enum>::value, "e_to_b() requires enum argument" );
       return static_cast<typename std::underlying_type<Enum>::type>( e );
    }
-
+#ifdef NDEBUG
+   template<typename out>
+   void
+   log( out& o ) { std::cout << o << std::endl; }
+#else
    template<typename out>
    void
    log( out& o, const std::source_location location = std::source_location::current() )
    {
       std::string s { location.file_name() };
       uint16_t i = static_cast<uint16_t>( s.rfind( "\\" ) ) + 1;    // Œ©‚Â‚©‚Á‚½ˆÊ’u‚ÌŽŸ‚ª—~‚µ‚¢‚Ì‚Å+1
-      std::cout << o << " : This code is on [line:" << location.line() << "], in [file:"
-                << std::string { s.begin() + i, s.end() } << "]. " << std::endl;
+      std::cout << o << " : This code is on [line:" << location.line()
+                << "], in [file:" << std::string { s.begin() + i, s.end() } << "]. " << std::endl;
    }
+#endif
 }    // namespace my_library::utl

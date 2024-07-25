@@ -1,4 +1,5 @@
 #include "vulkan_debug.hpp"
+#include "utilities.hpp"
 
 #include<iostream>
 
@@ -14,25 +15,26 @@ namespace my_library::vulkan
       return VK_FALSE;
    }
 
-   vk::DebugUtilsMessengerCreateInfoEXT
+   vk_dbg_utl_msgr_createinfo_ext
    vulkan_debug::messenger_create_info()
    {
       // in debug mode, use the debugUtilsMessengerCallback
-      vk::DebugUtilsMessageSeverityFlagsEXT severityFlags( vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning
-                                                           | vk::DebugUtilsMessageSeverityFlagBitsEXT::eError
-                                                           | vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose );
+      vk_dbg_utl_msg_severity_flags_ext severityFlags( vk_dbg_utl_msg_severity_flag_bits_ext::eWarning
+                                                       | vk_dbg_utl_msg_severity_flag_bits_ext::eError
+                                                       | vk_dbg_utl_msg_severity_flag_bits_ext::eVerbose );
 
-      vk::DebugUtilsMessageTypeFlagsEXT messageTypeFlags( vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral
-                                                          | vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance
-                                                          | vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation );
+      vk_dbg_utl_msg_type_flags_ext messageTypeFlags( vk_dbg_utl_msg_type_flag_bits_ext::eGeneral
+                                                      | vk_dbg_utl_msg_type_flag_bits_ext::ePerformance
+                                                      | vk_dbg_utl_msg_type_flag_bits_ext::eValidation );
 
-      return vk::DebugUtilsMessengerCreateInfoEXT( {}, severityFlags, messageTypeFlags, &debag_callBack );
+      return vk_dbg_utl_msgr_createinfo_ext( {}, severityFlags, messageTypeFlags, &debag_callBack );
    }
 
    void
-   vulkan_debug::setup_messenger( unq_vk_instance& instance, vk::DispatchLoaderDynamic& dld )
+   vulkan_debug::setup_messenger( const unq_vk_instance& instance, const vk_dispatchloader_dynamic& dld )
    {
       _vk_debug_messenger = instance->createDebugUtilsMessengerEXTUnique( messenger_create_info(), nullptr, dld );
+      utl::log( "DebugUtils Messenger setup completed." );
    }
 
 
