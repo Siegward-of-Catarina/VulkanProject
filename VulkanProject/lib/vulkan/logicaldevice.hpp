@@ -22,7 +22,7 @@ namespace my_library::vulkan
       void
       init( const std::unique_ptr<physicaldevice>& physicaldevice, const vk_dispatchloader_dynamic& dld );
 
-      const vk_queue&
+      const vk_queue
       get_queue( const uint32_t& queuefamily_idx, const vk_dispatchloader_dynamic& dld );
 
       unq_vk_device&

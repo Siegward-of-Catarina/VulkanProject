@@ -11,13 +11,12 @@ namespace my_library::vulkan
    {
    public:
       void
-      init( std::string                                   app_name,
-            const std::vector<const char*>&               validationlayers,
+      init( const std::string                                   app_name,
             const vk_debugutils_messenger_createinfo_ext& d_info,
             vk_dispatchloader_dynamic&                    dld );
 
       void
-      init( std::string app_name, vk_dispatchloader_dynamic& dld );
+      init( const std::string app_name, vk_dispatchloader_dynamic& dld );
 
       unq_vk_instance&
       vk_obj();

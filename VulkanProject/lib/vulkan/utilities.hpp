@@ -18,6 +18,7 @@ namespace my_library::utl
       static_assert( std::is_enum<Enum>::value, "e_to_b() requires enum argument" );
       return static_cast<typename std::underlying_type<Enum>::type>( e );
    }
+
    template<typename out>
    void
    log( out& o, const std::source_location location = std::source_location::current() )

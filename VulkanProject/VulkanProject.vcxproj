@@ -29,6 +29,7 @@
     </ClCompile>
     <ClCompile Include="lib\vulkan\physicaldevice.cpp" />
     <ClCompile Include="lib\vulkan\queuefamily.cpp" />
+    <ClCompile Include="lib\vulkan\validationlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hpp" />
@@ -48,6 +49,7 @@
     </ClInclude>
     <ClInclude Include="lib\vulkan\physicaldevice.hpp" />
     <ClInclude Include="lib\vulkan\queuefamily.hpp" />
+    <ClInclude Include="lib\vulkan\validationlayer.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

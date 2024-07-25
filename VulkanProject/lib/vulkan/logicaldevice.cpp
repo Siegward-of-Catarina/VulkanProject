@@ -42,7 +42,7 @@ namespace my_library::vulkan
       if ( !_device ) { throw std::runtime_error( "failed to create logical device!" ); }
    }
 
-   const vk_queue&
+   const vk_queue
    logicaldevice::get_queue( const uint32_t& queuefamily_idx,
                              const vk_dispatchloader_dynamic& dld )
    {

@@ -1,5 +1,7 @@
 #include "instance.hpp"
 
+#include "validationlayer.hpp"
+
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
 #include <iostream>
 #include <string>
@@ -10,7 +12,7 @@ namespace
 {
    // extensions ------------------------------------------------
    bool
-   check_extension_support( const std::vector<const char*>&              extensions,
+   check_extension_support( const std::vector<const char*>&                      extensions,
                             const my_library::vulkan::vk_dispatchloader_dynamic& dld )
    {
       // 拡張機能の情報を取得
@@ -61,35 +63,36 @@ namespace
 namespace my_library
 {
    void
-   vulkan::instance::init( std::string                                 app_name,
-                           const std::vector<const char*>&             validationlayers,
+   vulkan::instance::init( const std::string                             app_name,
                            const vk_debugutils_messenger_createinfo_ext& d_info,
-                           vk_dispatchloader_dynamic&                  dld )
+                           vk_dispatchloader_dynamic&                    dld )
    {
-      vk::ApplicationInfo appInfo(
+      vk_applicationinfo appInfo(
         "Hello Triangle", VK_MAKE_VERSION( 1, 0, 0 ), "No Engine", VK_MAKE_VERSION( 1, 0, 0 ), VK_API_VERSION_1_2 );
 
       auto extensions = get_required_extensions( dld );
 
-      vk::StructureChain<vk::InstanceCreateInfo, vk::DebugUtilsMessengerCreateInfoEXT> createInfo(
+      auto validationlayers = get_validationlayers();//vulkan.cppでチェックしているのでemptyじゃないとみなす。
+      assert( !validationlayers.empty() );
+      vk_structure_chain<vk_instance_createinfo, vk_debugutils_messenger_createinfo_ext> createInfo(
         { {}, &appInfo, validationlayers, extensions }, d_info );
 
-      _vk_instance = vk::createInstanceUnique( createInfo.get<vk::InstanceCreateInfo>(), nullptr, dld );
+      _vk_instance = vk::createInstanceUnique( createInfo.get<vk_instance_createinfo>(), nullptr, dld );
 
       // 全ての関数ポインタを取得する
       dld.init( *_vk_instance );
    }
 
    void
-   vulkan::instance::init( std::string app_name, vk_dispatchloader_dynamic& dld )
+   vulkan::instance::init( const std::string app_name, vk_dispatchloader_dynamic& dld )
    {
-      vk::ApplicationInfo appInfo(
+      vk_applicationinfo appInfo(
         "Hello Triangle", VK_MAKE_VERSION( 1, 0, 0 ), "No Engine", VK_MAKE_VERSION( 1, 0, 0 ), VK_API_VERSION_1_2 );
 
       auto extensions = get_required_extensions( dld );
 
       // in non-debug mode
-      vk::InstanceCreateInfo createInfo( {}, &appInfo, {}, extensions );
+      vk_instance_createinfo createInfo( {}, &appInfo, {}, extensions );
       _vk_instance = vk::createInstanceUnique( createInfo, nullptr, dld );
 
       // 全ての関数ポインタを取得する
@@ -98,9 +101,7 @@ namespace my_library
 
    vulkan::unq_vk_instance&
    vulkan::instance::vk_obj()
-   {
-      return _vk_instance;
-   }
+   {}
 
    vulkan::instance::instance() : _vk_instance {} {}
 

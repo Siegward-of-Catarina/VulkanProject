@@ -58,7 +58,7 @@ namespace my_library
             if ( !check_validationlayer_support() )
                throw std::runtime_error( "validation layers requested, but not available!" );
 
-            _instance->init( "hello triangle", validationlayers, _vulkan_debug->messenger_create_info(), dld );
+            _instance->init( "hello triangle", _vulkan_debug->messenger_create_info(), dld );
             _vulkan_debug->setup_messenger( _instance->vk_obj(), dld );
             _surface->init( _instance->vk_obj(), window );
             _physicaldevice->pick_physical_device( _instance->vk_obj(), _surface->vk_obj(), dld );
