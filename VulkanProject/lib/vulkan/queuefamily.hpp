@@ -16,10 +16,10 @@ namespace my_library::vulkan::queuefamily
    {
       std::optional<uint32_t> graphicsfamily;
       std::optional<uint32_t> presentfamily;
-      bool
+      const bool
       is_complete();
 
-      std::optional<uint32_t>
+      const std::optional<uint32_t>
       select( const types& type );
    };
 

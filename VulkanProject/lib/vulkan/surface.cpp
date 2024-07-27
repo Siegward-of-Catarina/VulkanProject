@@ -18,7 +18,7 @@ namespace my_library::vulkan
       utl::log( "window surface created." );
    }
 
-   unq_vk_surface&
+   const unq_vk_surface&
    surface::vk_obj()
    {
       return _surface;

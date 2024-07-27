@@ -10,7 +10,7 @@ namespace
 
       if ( validationlayers.empty() ) return false;
 
-      std::vector<vk::LayerProperties> availablelayers = vk::enumerateInstanceLayerProperties();
+      const std::vector<vk::LayerProperties> availablelayers = vk::enumerateInstanceLayerProperties();
       bool                             layerfound      = false;
       for ( const char* layername : validationlayers )
       {
@@ -38,7 +38,7 @@ namespace my_library::vulkan
 #else
       const std::vector<const char*> validationlayers { "VK_LAYER_KHRONOS_validation" };
       //一度だけチェックする
-      static bool                    valid = check_validationlayer_support( validationlayers );
+      static const bool                    valid = check_validationlayer_support( validationlayers );
 
       if ( !valid ) throw std::runtime_error( "validation layers requested, but not available!" );
 #endif

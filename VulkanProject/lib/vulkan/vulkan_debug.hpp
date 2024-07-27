@@ -15,7 +15,7 @@ namespace my_library::vulkan
                       void*                                       user_data_ptr );
 
    public:
-      vk_dbg_utl_msgr_createinfo_ext
+      const vk_dbg_utl_msgr_createinfo_ext
       messenger_create_info();
 
       void

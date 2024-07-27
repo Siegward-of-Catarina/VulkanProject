@@ -17,7 +17,7 @@ namespace my_library::vulkan
                             const unq_vk_surface&            surface,
                             const vk_dispatchloader_dynamic& dld );
 
-      vk_physicaldevice&
+      const vk_physicaldevice&
       vk_obj();
 
       const uint32_t&

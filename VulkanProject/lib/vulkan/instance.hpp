@@ -18,7 +18,7 @@ namespace my_library::vulkan
       void
       init( const std::string app_name, vk_dispatchloader_dynamic& dld );
 
-      unq_vk_instance&
+      const unq_vk_instance&
       vk_obj();
 
       instance();

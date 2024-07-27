@@ -15,15 +15,15 @@ namespace my_library::vulkan
       return VK_FALSE;
    }
 
-   vk_dbg_utl_msgr_createinfo_ext
+   const vk_dbg_utl_msgr_createinfo_ext
    vulkan_debug::messenger_create_info()
    {
       // in debug mode, use the debugUtilsMessengerCallback
-      vk_dbg_utl_msg_severity_flags_ext severityFlags( vk_dbg_utl_msg_severity_flag_bits_ext::eWarning
+      const vk_dbg_utl_msg_severity_flags_ext severityFlags( vk_dbg_utl_msg_severity_flag_bits_ext::eWarning
                                                        | vk_dbg_utl_msg_severity_flag_bits_ext::eError
                                                        | vk_dbg_utl_msg_severity_flag_bits_ext::eVerbose );
 
-      vk_dbg_utl_msg_type_flags_ext messageTypeFlags( vk_dbg_utl_msg_type_flag_bits_ext::eGeneral
+      const vk_dbg_utl_msg_type_flags_ext messageTypeFlags( vk_dbg_utl_msg_type_flag_bits_ext::eGeneral
                                                       | vk_dbg_utl_msg_type_flag_bits_ext::ePerformance
                                                       | vk_dbg_utl_msg_type_flag_bits_ext::eValidation );
 

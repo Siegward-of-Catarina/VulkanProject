@@ -10,7 +10,7 @@ namespace my_library::vulkan
    public:
       void
       init( const unq_vk_instance& instance, GLFWwindow* window );
-      unq_vk_surface&
+      const unq_vk_surface&
       vk_obj();
       surface();
       ~surface();

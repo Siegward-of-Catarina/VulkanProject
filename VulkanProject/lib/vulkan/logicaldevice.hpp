@@ -22,7 +22,7 @@ namespace my_library::vulkan
       const vk_queue
       get_queue( const uint32_t& queuefamily_idx, const vk_dispatchloader_dynamic& dld );
 
-      unq_vk_device&
+      const unq_vk_device&
       vk_obj();
 
       logicaldevice();

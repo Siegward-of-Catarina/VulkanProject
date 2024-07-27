@@ -68,16 +68,16 @@ namespace my_library
                            const vk_dbg_utl_msgr_createinfo_ext& d_info,
                            vk_dispatchloader_dynamic&            dld )
    {
-      vk_applicationinfo appInfo(
+      const vk_applicationinfo appInfo(
         "Hello Triangle", VK_MAKE_VERSION( 1, 0, 0 ), "No Engine", VK_MAKE_VERSION( 1, 0, 0 ), VK_API_VERSION_1_2 );
 
-      auto extensions = get_required_extensions( dld );
+      const auto extensions = get_required_extensions( dld );
       assert( !extensions.empty() ); // emptyで返ることはないだろうが一応確認
       utl::log( "requested extensions is a suported." );
 
-      auto validationlayers = get_validationlayers();    // vulkan.cppでチェックしているのでemptyじゃないとみなす。
+      const auto validationlayers = get_validationlayers();    // vulkan.cppでチェックしているのでemptyじゃないとみなす。
       assert( !validationlayers.empty() );
-      vk_structure_chain<vk_instance_createinfo, vk_dbg_utl_msgr_createinfo_ext> createInfo(
+      const vk_structure_chain<vk_instance_createinfo, vk_dbg_utl_msgr_createinfo_ext> createInfo(
         { {}, &appInfo, validationlayers, extensions }, d_info );
 
       _vk_instance = vk::createInstanceUnique( createInfo.get<vk_instance_createinfo>(), nullptr, dld );
@@ -91,14 +91,14 @@ namespace my_library
    void
    vulkan::instance::init( const std::string app_name, vk_dispatchloader_dynamic& dld )
    {
-      vk_applicationinfo appInfo(
+      const vk_applicationinfo appInfo(
         "Hello Triangle", VK_MAKE_VERSION( 1, 0, 0 ), "No Engine", VK_MAKE_VERSION( 1, 0, 0 ), VK_API_VERSION_1_2 );
 
-      auto extensions = get_required_extensions( dld );
+      const auto extensions = get_required_extensions( dld );
       assert( !extensions.empty() );    // emptyで返ることはないだろうが一応確認
       utl::log( "requested extensions is a suported." );
 
-      vk_instance_createinfo createInfo( {}, &appInfo, {}, extensions );
+     const vk_instance_createinfo createInfo( {}, &appInfo, {}, extensions );
       _vk_instance = vk::createInstanceUnique( createInfo, nullptr, dld );
 
       // 全ての関数ポインタを取得する
@@ -107,7 +107,7 @@ namespace my_library
       utl::log( "instance created." );
    }
 
-   vulkan::unq_vk_instance&
+   const vulkan::unq_vk_instance&
    vulkan::instance::vk_obj()
    {
       return _vk_instance;
