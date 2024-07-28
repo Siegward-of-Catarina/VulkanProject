@@ -1,6 +1,7 @@
 #pragma once
 #include "vk_object_types.hpp"
 #include "queuefamily.hpp"
+#include "swap_chain_support.hpp"
 namespace my_library::vulkan
 {
    class physicaldevice
@@ -20,9 +21,8 @@ namespace my_library::vulkan
       const vk_physicaldevice&
       vk_obj();
 
-      const uint32_t&
+      const uint32_t
       valid_queuefamily_idx( const queuefamily::types& type );
-
       physicaldevice();
       ~physicaldevice();
 
@@ -30,5 +30,7 @@ namespace my_library::vulkan
       // ‚±‚ê‚Ívk_instance‚ª“à•”‚Å”jŠü‚µ‚Ä‚­‚ê‚é‚Ì‚Åunique_ptr‚ÍŽg‚í‚È‚¢
       vk_physicaldevice    _physical_device;
       queuefamily::indices _indices;
+      swapchain_support::details _swapchain_support;
+
    };
 }    // namespace my_library::vulkan

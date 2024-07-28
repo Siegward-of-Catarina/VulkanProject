@@ -28,7 +28,7 @@ namespace my_library::utl
    log( out& o, const std::source_location location = std::source_location::current() )
    {
       std::string s { location.file_name() };
-      uint16_t i = static_cast<uint16_t>( s.rfind( "\\" ) ) + 1;    // Œ©‚Â‚©‚Á‚½ˆÊ’u‚ÌŽŸ‚ª—~‚µ‚¢‚Ì‚Å+1
+      uint32_t i { static_cast<uint32_t>( s.rfind( "\\" ) ) + 1 };    // Œ©‚Â‚©‚Á‚½ˆÊ’u‚ÌŽŸ‚ª—~‚µ‚¢‚Ì‚Å+1
       std::cout << o << " : This code is on [line:" << location.line()
                 << "], in [file:" << std::string { s.begin() + i, s.end() } << "]. " << std::endl;
    }

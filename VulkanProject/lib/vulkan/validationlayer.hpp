@@ -1,6 +1,6 @@
 #pragma once
 #include<vector>
-namespace my_library::vulkan
+namespace my_library::vulkan::layer
 {
    const std::vector<const char*>
    get_validationlayers();

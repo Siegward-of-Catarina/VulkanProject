@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="app.cpp" />
+    <ClCompile Include="lib\vulkan\extension.cpp" />
     <ClCompile Include="lib\vulkan\instance.cpp" />
     <ClCompile Include="lib\glwindow.cpp" />
     <ClCompile Include="hello_triangle_app.cpp" />
@@ -30,9 +31,11 @@
     <ClCompile Include="lib\vulkan\physicaldevice.cpp" />
     <ClCompile Include="lib\vulkan\queuefamily.cpp" />
     <ClCompile Include="lib\vulkan\validationlayer.cpp" />
+    <ClCompile Include="lib\vulkan\swap_chain_support.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hpp" />
+    <ClInclude Include="lib\vulkan\extension.hpp" />
     <ClInclude Include="lib\vulkan\surface.hpp" />
     <ClInclude Include="lib\vulkan\vk_object_types.hpp" />
     <ClInclude Include="lib\vulkan\instance.hpp" />
@@ -50,6 +53,7 @@
     <ClInclude Include="lib\vulkan\physicaldevice.hpp" />
     <ClInclude Include="lib\vulkan\queuefamily.hpp" />
     <ClInclude Include="lib\vulkan\validationlayer.hpp" />
+    <ClInclude Include="lib\vulkan\swap_chain_support.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

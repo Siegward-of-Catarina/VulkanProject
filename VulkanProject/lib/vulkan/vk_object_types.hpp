@@ -34,4 +34,8 @@ namespace my_library::vulkan
    using vk_queue = vk::Queue;
    //-----------------------------------------
    using unq_vk_surface = vk::UniqueSurfaceKHR;
+   //----swapchain----------------------------
+   using vk_surface_capabilities_khr = vk::SurfaceCapabilitiesKHR;
+   using vk_surface_format_khr = vk::SurfaceFormatKHR;
+   using vk_present_mode_khr = vk::PresentModeKHR;
 }    // namespace my_library::vulkan

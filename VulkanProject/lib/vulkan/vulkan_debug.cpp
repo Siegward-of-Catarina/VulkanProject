@@ -1,7 +1,8 @@
 #include "vulkan_debug.hpp"
+
 #include "utilities.hpp"
 
-#include<iostream>
+#include <iostream>
 
 namespace my_library::vulkan
 {
@@ -19,15 +20,15 @@ namespace my_library::vulkan
    vulkan_debug::messenger_create_info()
    {
       // in debug mode, use the debugUtilsMessengerCallback
-      const vk_dbg_utl_msg_severity_flags_ext severityFlags( vk_dbg_utl_msg_severity_flag_bits_ext::eWarning
-                                                       | vk_dbg_utl_msg_severity_flag_bits_ext::eError
-                                                       | vk_dbg_utl_msg_severity_flag_bits_ext::eVerbose );
+      const vk_dbg_utl_msg_severity_flags_ext severityFlags { vk_dbg_utl_msg_severity_flag_bits_ext::eWarning
+                                                              | vk_dbg_utl_msg_severity_flag_bits_ext::eError
+                                                              | vk_dbg_utl_msg_severity_flag_bits_ext::eVerbose };
 
-      const vk_dbg_utl_msg_type_flags_ext messageTypeFlags( vk_dbg_utl_msg_type_flag_bits_ext::eGeneral
-                                                      | vk_dbg_utl_msg_type_flag_bits_ext::ePerformance
-                                                      | vk_dbg_utl_msg_type_flag_bits_ext::eValidation );
+      const vk_dbg_utl_msg_type_flags_ext messageTypeFlags { vk_dbg_utl_msg_type_flag_bits_ext::eGeneral
+                                                             | vk_dbg_utl_msg_type_flag_bits_ext::ePerformance
+                                                             | vk_dbg_utl_msg_type_flag_bits_ext::eValidation };
 
-      return vk_dbg_utl_msgr_createinfo_ext( {}, severityFlags, messageTypeFlags, &debag_callBack );
+      return vk_dbg_utl_msgr_createinfo_ext { {}, severityFlags, messageTypeFlags, &debag_callBack };
    }
 
    void
@@ -36,6 +37,5 @@ namespace my_library::vulkan
       _vk_debug_messenger = instance->createDebugUtilsMessengerEXTUnique( messenger_create_info(), nullptr, dld );
       utl::log( "DebugUtils Messenger setup completed." );
    }
-
 
 }    // namespace my_library::vulkan

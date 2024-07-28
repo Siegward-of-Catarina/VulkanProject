@@ -23,27 +23,22 @@ namespace my_library
    {
       class vulkan
       {
-      private:
-         bool
-         check_validationlayer_support();
-
       public:
          void
-         init( GLFWwindow* window );
+         init( GLFWwindow* window, const bool debug = false );
 
          vulkan();
          ~vulkan();
 
       private:
-         vk_dispatchloader_dynamic dld;
-         vk_queue                      _graphics_queue;
-         vk_queue                      _present_queue;
-         std::unique_ptr<instance>     _instance;
-         std::unique_ptr<vulkan_debug> _vulkan_debug;
-         std::unique_ptr<surface> _surface;
-         std::unique_ptr<physicaldevice> _physicaldevice;
-         std::unique_ptr<logicaldevice>  _logicaldevice;
-
+         vk_dispatchloader_dynamic             dld;
+         vk_queue                              _graphics_queue;
+         vk_queue                              _present_queue;
+         const std::unique_ptr<instance>       _instance;
+         const std::unique_ptr<vulkan_debug>   _vulkan_debug;
+         const std::unique_ptr<surface>        _surface;
+         const std::unique_ptr<physicaldevice> _physicaldevice;
+         const std::unique_ptr<logicaldevice>  _logicaldevice;
       };
    }    // namespace vulkan
 

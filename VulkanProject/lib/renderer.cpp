@@ -7,9 +7,9 @@
 namespace my_library
 {
    void
-   renderer::init( GLFWwindow* window )
+   renderer::init( GLFWwindow* window, const bool debug )
    {
-      _vulkan->init( window );
+      _vulkan->init( window, debug );
    }
 
    renderer::renderer() : _vulkan { std::make_unique<vulkan::vulkan>() } {}

@@ -13,7 +13,10 @@
     <ClCompile Include="lib\vulkan\logicaldevice.cpp" />
     <ClCompile Include="lib\vulkan\physicaldevice.cpp" />
     <ClCompile Include="lib\vulkan\queuefamily.cpp" />
-    <ClCompile Include="lib\vulkan\device.cpp" />
+    <ClCompile Include="lib\vulkan\surface.cpp" />
+    <ClCompile Include="lib\vulkan\validationlayer.cpp" />
+    <ClCompile Include="lib\vulkan\extension.cpp" />
+    <ClCompile Include="lib\vulkan\swap_chain_support.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hpp" />
@@ -30,6 +33,9 @@
     <ClInclude Include="lib\vulkan\physicaldevice.hpp" />
     <ClInclude Include="lib\vulkan\queuefamily.hpp" />
     <ClInclude Include="lib\vulkan\utilities.hpp" />
-    <ClInclude Include="lib\vulkan\device.hpp" />
+    <ClInclude Include="lib\vulkan\surface.hpp" />
+    <ClInclude Include="lib\vulkan\validationlayer.hpp" />
+    <ClInclude Include="lib\vulkan\extension.hpp" />
+    <ClInclude Include="lib\vulkan\swap_chain_support.hpp" />
   </ItemGroup>
 </Project>
