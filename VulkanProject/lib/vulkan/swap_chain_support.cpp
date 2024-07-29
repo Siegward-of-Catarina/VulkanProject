@@ -16,4 +16,29 @@ namespace my_library::vulkan::swapchain_support
    {
       return !this->formats.empty() && !this->present_modes.empty();
    }
+
+   const vk_surface_format_khr
+   details::choose_swap_surfaceformat( const vk::Format&        format,
+                                       const vk::ColorSpaceKHR& colorspace )
+   {
+      assert( !formats.empty() );
+      for ( const auto& availableformat : formats )
+      {
+         if ( availableformat.format == format && availableformat.colorSpace == colorspace ) { return availableformat; }
+      }
+      return formats[ 0 ];
+   }
+
+   const vk_present_mode_khr
+   details::choose_swap_presentmode( const vk::PresentModeKHR& presentmode )
+   {
+      assert( !present_modes.empty() );
+      for ( const auto& available_mode : present_modes )
+      {
+         if ( available_mode == presentmode ) return available_mode;
+      }
+
+      return vk::PresentModeKHR::eFifo;
+   }
+
 }    // namespace my_library::vulkan::swapchain_support
