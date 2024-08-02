@@ -1,11 +1,11 @@
 #include "vulkan.hpp"
 
 #include "container.hpp"
-#include "instance.hpp"
+#include "core/instance.hpp"
 #include "logicaldevice.hpp"
 #include "physicaldevice.hpp"
 #include "queuefamily.hpp"
-#include "surface.hpp"
+#include "core/surface.hpp"
 
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
 
@@ -28,7 +28,7 @@ namespace my_library
 
          _instance->init( "hello triangle", debug );
 
-         _surface->init( _container->instance, window );
+         //_surface->init( _container->instance, window );
          _physicaldevice->pick_physical_device( _container->instance, _surface->vk_obj(), dld );
          _logicaldevice->init( _physicaldevice, dld );
 
