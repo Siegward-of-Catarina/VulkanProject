@@ -10,8 +10,8 @@ namespace my_library
 {
    namespace vulkan
    {
+      class container;
       class instance;
-      class vulkan_debug;
       class surface;
       class physicaldevice;
       class logicaldevice;
@@ -34,8 +34,8 @@ namespace my_library
          vk_dispatchloader_dynamic             dld;
          vk_queue                              _graphics_queue;
          vk_queue                              _present_queue;
+         const std::shared_ptr<container>       _container;
          const std::unique_ptr<instance>       _instance;
-         const std::unique_ptr<vulkan_debug>   _vulkan_debug;
          const std::unique_ptr<surface>        _surface;
          const std::unique_ptr<physicaldevice> _physicaldevice;
          const std::unique_ptr<logicaldevice>  _logicaldevice;

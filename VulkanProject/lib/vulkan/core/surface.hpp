@@ -1,18 +1,18 @@
 #pragma once
-#include "vk_object_types.hpp"
+#include "core_commonheaders.hpp"
 struct GLFWwindow;
 namespace my_library::vulkan
 {
-   class surface
+   class surface : public vkobject
    {
    private:
 
    public:
       void
-      init( const unq_vk_instance& instance, GLFWwindow* window );
+      init( GLFWwindow* window );
       const unq_vk_surface&
       vk_obj();
-      surface();
+      surface( const shared_container& c );
       ~surface();
 
    private:

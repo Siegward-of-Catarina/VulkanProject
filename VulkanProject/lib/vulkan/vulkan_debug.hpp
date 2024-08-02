@@ -2,29 +2,15 @@
 
 #include "vk_object_types.hpp"
 
-namespace my_library::vulkan
+namespace my_library
 {
-   class vulkan_debug
+   namespace vulkan
    {
-   public:
-       //static Ç»ÇÃÇ≈ using Ç≥ÇÍÇΩå^ñºÇ™égÇ¶Ç»Ç¢.ÇÊÇ¡Çƒê∂ÇÃå^ñºÇégóp
-      static VKAPI_ATTR VkBool32 VKAPI_CALL
-      debag_callBack( VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
-                      VkDebugUtilsMessageTypeFlagsEXT             message_type,
-                      const VkDebugUtilsMessengerCallbackDataEXT* callback_data_ptr,
-                      void*                                       user_data_ptr );
+      namespace debug_utl
+      {
+         const vk_dbg_utl_msgr_createinfo_ext
+         messenger_create_info();
 
-   public:
-      const vk_dbg_utl_msgr_createinfo_ext
-      messenger_create_info();
-
-      void
-      setup_messenger( const unq_vk_instance& instance, const vk_dispatchloader_dynamic& dld );
-
-      vulkan_debug() {}
-      ~vulkan_debug() {}
-
-   private:
-      unq_vk_dbg_utl_msgr_ext _vk_debug_messenger;
-   };
-}    // namespace my_library::vulkan
+      }    // namespace debug_utl
+   }       // namespace vulkan
+}    // namespace my_library
