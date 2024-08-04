@@ -1,3 +1,9 @@
 #pragma once
-#include "../vk_object_types.hpp"
-#include "vkobject.hpp"
+#include "../initializeInfo.hpp"
+#include "../vkObjectTypes.hpp"
+namespace my_library::vkm
+{
+   class Container;
+   using shared_ptr_container = std::shared_ptr<Container>;
+   using weak_ptr_container = std::weak_ptr<Container>;
+}

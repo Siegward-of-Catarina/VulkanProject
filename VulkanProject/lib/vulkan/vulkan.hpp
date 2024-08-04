@@ -1,45 +1,53 @@
 #pragma once
 
-#include "vk_object_types.hpp"
+#include "vkObjectTypes.hpp"
 
 #include <memory>
 #include <optional>
 #include <vector>
-struct GLFWwindow;
 namespace my_library
 {
-   namespace vulkan
+   namespace window
    {
-      class container;
-      class instance;
-      class surface;
-      class physicaldevice;
-      class logicaldevice;
-   }    // namespace vulkan
+      class GLwindow;
+   }
+   namespace vkm
+   {
+      namespace vulkan
+      {
+         struct CreateInfo;
+      }
+      namespace instance
+      {
+         struct CreateInfo;
+      }
+      class Container;
+      class Instance;
+
+   }
 }    // namespace my_library
 namespace my_library
 {
-   namespace vulkan
+   namespace vkm
    {
-      class vulkan
+
+      class Vulkan
       {
       public:
          void
-         init( GLFWwindow* window, const bool debug = false );
+         init( const vulkan::CreateInfo& create_info, const bool debug = false );
 
-         vulkan();
-         ~vulkan();
+         Vulkan();
+         ~Vulkan();
 
       private:
-         vk_dispatchloader_dynamic             dld;
-         vk_queue                              _graphics_queue;
-         vk_queue                              _present_queue;
-         const std::shared_ptr<container>       _container;
-         const std::unique_ptr<instance>       _instance;
-         const std::unique_ptr<surface>        _surface;
-         const std::unique_ptr<physicaldevice> _physicaldevice;
-         const std::unique_ptr<logicaldevice>  _logicaldevice;
+
+      private:
+         std::shared_ptr<Container> _container;
+         std::unique_ptr<Instance> _instance;
+         Queue _graphics_queue;
+         Queue _present_queue;
       };
-   }    // namespace vulkan
+   }    // namespace vkm
 
 }    // namespace my_library

@@ -2,10 +2,10 @@
 
 namespace core
 {
-   void app::run()
+   void App::run()
    {
       init();
-      main_loop();
+      mainLoop();
       cleanup();
    }
 }

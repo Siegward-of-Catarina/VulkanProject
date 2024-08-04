@@ -7,13 +7,13 @@ struct GLFWwindow;
 struct GLFWmonitor;
 namespace my_library::window
 {
-    struct gl_deleter
-    {
-       void
-       operator()( GLFWwindow* ptr );
-    };
+   struct GLdeleter
+   {
+      void
+      operator()( GLFWwindow* ptr );
+   };
 
-   class glwindow
+   class GLwindow
    {
    public:
       void
@@ -21,25 +21,29 @@ namespace my_library::window
       int
       close();
       void
-      pool_event();
+      poolEvent();
       GLFWwindow*
-      raw_glfwW_ptr();
-      const std::uint32_t
+      rawGLFWwindowPtr();
+      const std::uint32_t&
       width();
-      const std::uint32_t
+      const std::uint32_t&
       height();
+      const std::string&
+      title();
+      //‚Ì‚¿‚É•ª—£‚·‚é—\’è
+      const std::vector<const char*>
+      getRequiredInstanceExtensions( const bool debug ) const;
 
-      explicit glwindow( const std::uint32_t width, const std::uint32_t height, const char* title );
-      glwindow() = delete;
-      ~glwindow();
+      explicit GLwindow( const std::uint32_t& width, const std::uint32_t& height, const std::string& title );
+      GLwindow() = delete;
+      ~GLwindow();
 
    private:
-
-      std::unique_ptr<GLFWwindow, gl_deleter> _glfw_window;
+      std::unique_ptr<GLFWwindow, GLdeleter> _glfw_window;
 
       const std::uint32_t _width;
       const std::uint32_t _height;
-      const char*         _title;
+      const std::string   _title;
    };
 
 }    // namespace my_library::window

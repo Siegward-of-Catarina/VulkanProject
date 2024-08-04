@@ -1,20 +1,18 @@
 #pragma once
 #include "core_commonheaders.hpp"
 
-namespace my_library::vulkan
+namespace my_library::vkm
 {
-
-   class instance : public vkobject
+   class Instance
    {
    public:
       void
-      init( const std::string app_name, const bool debug );
-
-      instance( const shared_container& c );
-      ~instance();
-
+      init( const instance::CreateInfo& create_info, const bool debug );
+      Instance( const shared_ptr_container& c );
+      ~Instance();
    private:
-      unq_vk_dbg_utl_msgr_ext _vk_dbg_magr;
+      class Impl;
+      std::unique_ptr<Impl> _pimpl;
    };
 
 }    // namespace my_library::vulkan

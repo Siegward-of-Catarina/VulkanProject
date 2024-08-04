@@ -1,15 +1,15 @@
 #pragma once
 namespace core
 {
-   class app
+   class App
    {
    protected:
-      app() {};
-      ~app() {};
+      App() {};
+      ~App() {};
       virtual void
       init() = 0;
       virtual void
-      main_loop() = 0;
+      mainLoop() = 0;
       virtual void
       cleanup() = 0;
 

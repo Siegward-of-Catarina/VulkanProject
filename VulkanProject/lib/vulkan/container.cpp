@@ -1,26 +1,26 @@
 #include "container.hpp"
 namespace my_library
 {
-   namespace vulkan
+   namespace vkm
    {
       void
-      container::register_ctr( unq_vk_instance& ins )
+      Container::registerCtr( UniqueInstance& instance )
       {
-         _instance = std::move( ins );
+         _instance = std::move( instance );
          _dld.init( *_instance );
       }
       void
-      container::register_ctr( unq_vk_instance&& ins )
+      Container::registerCtr( PhysicalDevice& gpu )
       {
-         _instance = std::move( ins );
-         _dld.init( *_instance );
+         _gpu = std::move( gpu );
       }
       void
-      container::register_ctr( const vk_physicaldevice& dev )
+      Container::registerCtr( UniqueSurface& surface )
       {
-         _gpu = dev;
+         _surface = std::move( surface );
       }
-      container::container() : dld { _dld }, instance { _instance }, gpu { _gpu } { _dld.init(); }
-      container::~container() {}
-   }    // namespace vulkan
+      Container::Container() : dld { _dld }, instance { _instance }, gpu { _gpu }, surface { _surface } { _dld.init(); }
+
+      Container::~Container() {}
+   }    // namespace vkm
 }    // namespace my_library

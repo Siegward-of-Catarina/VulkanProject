@@ -1,7 +1,7 @@
 #pragma once
 #include<vector>
-namespace my_library::vulkan::layer
+namespace my_library::vkm::layer
 {
    const std::vector<const char*>
-   get_validationlayers();
+   getValidationLayers();
 }    // namespace my_library::vulkan

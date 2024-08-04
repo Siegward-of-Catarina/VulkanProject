@@ -1,13 +1,11 @@
 #include "vulkan.hpp"
 
+#include "../glwindow.hpp"
 #include "container.hpp"
 #include "core/instance.hpp"
-#include "logicaldevice.hpp"
-#include "physicaldevice.hpp"
-#include "queuefamily.hpp"
-#include "core/surface.hpp"
-
-#include <GLFW/glfw3.h>    //拡張機能を取得するために必要
+#include "debugUtils.hpp"
+#include "initializeInfo.hpp"
+#include "validationLayer.hpp"
 
 namespace
 {
@@ -18,35 +16,24 @@ namespace
 namespace my_library
 {
    // vulkan::core
-   namespace vulkan
+   namespace vkm
    {
       void
-      vulkan::init( GLFWwindow* window, const bool debug )
+      Vulkan::init( const vulkan::CreateInfo& create_info, const bool debug )
       {
+         instance::CreateInfo instance_create_info;
+         instance_create_info.app_name          = create_info.app_name;
+         instance_create_info.debug_info        = debug_utl::populateCreateInfo();
+         instance_create_info.extensions        = create_info.window->getRequiredInstanceExtensions( debug );
+         instance_create_info.validation_layers = layer::getValidationLayers();
 
-         dld.init();
-
-         _instance->init( "hello triangle", debug );
-
-         //_surface->init( _container->instance, window );
-         _physicaldevice->pick_physical_device( _container->instance, _surface->vk_obj(), dld );
-         _logicaldevice->init( _physicaldevice, dld );
-
-         _graphics_queue = _logicaldevice->get_queue(
-           _physicaldevice->valid_queuefamily_idx( queuefamily::types::GRAPHICS_QUEUE ), dld );
-
-         _present_queue = _logicaldevice->get_queue(
-           _physicaldevice->valid_queuefamily_idx( queuefamily::types::PRESENT_QUEUE ), dld );
+         _instance->init( instance_create_info, debug );
       }
 
-      vulkan::vulkan()
-        : _container { std::make_shared<container>() }
-        , _instance { std::make_unique<instance>( _container ) }
-        , _surface { std::make_unique<surface>() }
-        , _physicaldevice { std::make_unique<physicaldevice>() }
-        , _logicaldevice { std::make_unique<logicaldevice>() }
-      {}
+      Vulkan::Vulkan() 
+          : _container { std::make_shared<Container>() }
+          , _instance { std::make_unique<Instance>(_container) } {}
 
-      vulkan::~vulkan() {}
-   }    // namespace vulkan
+      Vulkan::~Vulkan() {}
+   }       // namespace vkm
 }    // namespace my_library

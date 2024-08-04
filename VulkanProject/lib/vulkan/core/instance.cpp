@@ -1,75 +1,91 @@
 #include "instance.hpp"
 
+#include "../../../pch.hpp"
 #include "../container.hpp"
+#include "../debugUtils.hpp"
 #include "../extension.hpp"
 #include "../utilities.hpp"
-#include "../validationlayer.hpp"
-#include "../vulkan_debug.hpp"
-
-#include "../../../pch.hpp"
-
-#include <GLFW/glfw3.h>    //拡張機能を取得するために必要
 
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
-namespace
-{
-   namespace my = my_library::vulkan;
-
-   my::unq_vk_instance
-   create_dbg( const my::vk_applicationinfo& info, const my::vk_dispatchloader_dynamic& dld )
-   {
-      const auto extensions { my::ext::get_required_extensions( dld ) };
-
-      const auto validationlayers { my::layer::get_validationlayers() };
-      assert( !validationlayers.empty() );
-
-      const my::vk_structure_chain<my::vk_instance_createinfo, my::vk_dbg_utl_msgr_createinfo_ext> createInfo {
-         {{}, &info, validationlayers, extensions},
-         my::debug_utl::messenger_create_info()
-      };
-
-      return vk::createInstanceUnique( createInfo.get<my::vk_instance_createinfo>(), nullptr, dld );
-   }
-
-   my::unq_vk_instance
-   create( const my::vk_applicationinfo& info, const my::vk_dispatchloader_dynamic& dld )
-   {
-      const auto extensions { my::ext::get_required_extensions( dld ) };
-
-      const my::vk_instance_createinfo createInfo { {}, &info, {}, extensions };
-
-      return vk::createInstanceUnique( createInfo, nullptr, dld );
-   }
-}    // namespace
 namespace my_library
 {
-   void
-   vulkan::instance::init( const std::string app_name, const bool debug )
+   namespace vkm
    {
+      class Instance::Impl
+      {
+      public:
+         void
+         createDebug( const vkm::instance::CreateInfo& create_info );
+         void
+         create( const vkm::instance::CreateInfo& create_info );
+         explicit Impl( const shared_ptr_container& c );
+         ~Impl();
 
-      const vk_applicationinfo app_info( app_name.c_str(),
+      public:
+         const shared_ptr_container&               _container;
+         debug_utl::UniqueDebugUtilsMessengerEXT _debug_messenger;
+      };
+
+      void
+      Instance::Impl::createDebug( const vkm::instance::CreateInfo& create_info )
+      {
+         const ApplicationInfo app_info( create_info.app_name.c_str(),
                                          VK_MAKE_VERSION( 1, 0, 0 ),
-                                         app_name.c_str(),
+                                         create_info.app_name.c_str(),
                                          VK_MAKE_VERSION( 1, 0, 0 ),
                                          VK_API_VERSION_1_2 );
 
-      if ( const shared_container c = ctr_lock() )
-      {
-         // vk_instanceを作成し、コンテナに登録
-         c->register_ctr( debug ? create_dbg( app_info, c->dld ) : create( app_info, c->dld ) );
-         utl::log( "create instance succeeded." );
-         utl::log( "register vk_instance to container succeeded." );
+         assert( ext::checkExtensionSupport( create_info.extensions, _container->dld ) );
+         assert( !create_info.validation_layers.empty() );
 
-         if ( debug )
-         {
-            _vk_dbg_magr =
-              c->instance->createDebugUtilsMessengerEXTUnique( debug_utl::messenger_create_info(), nullptr, c->dld );
-            utl::log( "DebugUtils Messenger setup completed." );
-         }
+         const StructureChain<InstanceCreateInfo, debug_utl::MessengerCreateInfoEXT> createInfo {
+            {{}, &app_info, create_info.validation_layers, create_info.extensions},
+            create_info.debug_info
+         };
+
+         UniqueInstance instance { vk::createInstanceUnique(
+           createInfo.get<InstanceCreateInfo>(), nullptr, _container->dld ) };
+         _container->registerCtr( instance );
+         //必ずコンテナ登録後生成
+         _debug_messenger =
+           _container->instance->createDebugUtilsMessengerEXTUnique( create_info.debug_info, nullptr, _container->dld );
       }
-   }
+      void
+      Instance::Impl::create( const vkm::instance::CreateInfo& create_info )
+      {
+         if ( true )
+         {
+            const ApplicationInfo app_info( create_info.app_name.c_str(),
+                                            VK_MAKE_VERSION( 1, 0, 0 ),
+                                            create_info.app_name.c_str(),
+                                            VK_MAKE_VERSION( 1, 0, 0 ),
+                                            VK_API_VERSION_1_2 );
 
-   vulkan::instance::instance( const shared_container& c ) : vkobject { c } {}
+            assert( ext::checkExtensionSupport( create_info.extensions, _container->dld ) );
 
-   vulkan::instance::~instance() {}
+            const vkm::InstanceCreateInfo createInfo { {}, &app_info, {}, create_info.extensions };
+            UniqueInstance                instance { vk::createInstanceUnique( createInfo, nullptr, _container->dld ) };
+            _container->registerCtr( instance );
+         }
+         else { utl::runtimeError( "failed create instance." ); }
+      }
+
+      Instance::Impl::Impl( const shared_ptr_container& c ) : _container { c } {}
+      Instance::Impl::~Impl() {}
+   }    // namespace vkm
+}    // namespace my_library
+namespace my_library
+{
+   namespace vkm
+   {
+      void
+      Instance::init( const instance::CreateInfo& create_info, const bool debug )
+      {
+         if ( debug ) { _pimpl->createDebug( create_info ); }
+         else { _pimpl->create( create_info ); }
+      }
+      Instance::Instance( const shared_ptr_container& c ) : _pimpl { std::make_unique<Impl>( c ) } {}
+      Instance::~Instance() {}
+   }    // namespace vkm
+
 }    // namespace my_library

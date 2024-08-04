@@ -1,5 +1,5 @@
 
-#include "hello_triangle_app.hpp"
+#include "helloTriangleApp.hpp"
 
 #include <cstdlib>
 #include <iostream>
@@ -8,7 +8,7 @@
 int
 main()
 {
-   my_app::hello_triangle_app app;
+   my_app::HelloTriangleApp app;
    try
    {
       app.run();

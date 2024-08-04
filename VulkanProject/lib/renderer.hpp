@@ -2,25 +2,27 @@
 
 #include <memory>
 
-struct GLFWwindow;
-
 namespace my_library
 {
-   namespace vulkan
+    namespace window
+    {
+       class GLwindow;
+   }
+   namespace vkm
    {
-      class vulkan;
+      class Vulkan;
    }
 
-   class renderer
+   class Renderer
    {
    public:
       void
-      init( GLFWwindow* window, const bool debug = false );
+      init( std::unique_ptr<window::GLwindow>& gl_window, const bool debug = false );
 
-      renderer();
-      ~renderer();
+      Renderer();
+      ~Renderer();
 
    private:
-      std::unique_ptr<vulkan::vulkan> _vulkan;
+      std::unique_ptr<vkm::Vulkan> _vulkan;
    };
 }    // namespace my_library

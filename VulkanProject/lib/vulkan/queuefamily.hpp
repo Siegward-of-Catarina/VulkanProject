@@ -1,9 +1,9 @@
 #pragma once
-#include "vk_object_types.hpp"
+#include "vkObjectTypes.hpp"
 #include "utilities.hpp"
 
 #include <optional>
-namespace my_library::vulkan::queuefamily
+namespace my_library::vkm::queuefamily
 {
    enum class types
    {
@@ -24,6 +24,6 @@ namespace my_library::vulkan::queuefamily
    };
 
    indices
-   find_queuefamily( const vk_physicaldevice& device, const unq_vk_surface& surface, const vk_dispatchloader_dynamic& dld );
+   find_queuefamily( const PhysicalDevice& device, const UniqueSurface& surface, const DispatchLoaderDynamic& dld );
 
 }    // namespace my_library::vulkan::queuefamily

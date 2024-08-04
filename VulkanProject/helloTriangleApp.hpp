@@ -1,34 +1,34 @@
 #pragma once
 #include "app.hpp"
-
 #include <memory>
+
 namespace my_library
 {
-   class renderer;
+   class Renderer;
    namespace window
    {
-      class glwindow;
+      class GLwindow;
    }
 }    // namespace my_library
 namespace my_app
 {
-   class hello_triangle_app : public core::app
+   class HelloTriangleApp : public core::App
    {
    private:
       void
       init() override;
       void
-      main_loop() override;
+      mainLoop() override;
       void
       cleanup() override;
 
    public:
-      hello_triangle_app();
-      ~hello_triangle_app();
+      HelloTriangleApp();
+      ~HelloTriangleApp();
 
    private:
-      std::unique_ptr<my_library::window::glwindow> _window;
-      std::unique_ptr<my_library::renderer>         _renderer;
+      std::unique_ptr<my_library::window::GLwindow> _window;
+      std::unique_ptr<my_library::Renderer>         _renderer;
    };
 
 }    // namespace my_app

@@ -4,38 +4,37 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="lib\glwindow.cpp" />
-    <ClCompile Include="hello_triangle_app.cpp" />
     <ClCompile Include="lib\vulkan\vulkan.cpp" />
-    <ClCompile Include="lib\vulkan\instance.cpp" />
     <ClCompile Include="lib\renderer.cpp" />
-    <ClCompile Include="lib\vulkan\vulkan_debug.cpp" />
+    <ClCompile Include="lib\vulkan\debugUtils.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="lib\vulkan\logicaldevice.cpp" />
-    <ClCompile Include="lib\vulkan\physicaldevice.cpp" />
     <ClCompile Include="lib\vulkan\queuefamily.cpp" />
-    <ClCompile Include="lib\vulkan\surface.cpp" />
-    <ClCompile Include="lib\vulkan\validationlayer.cpp" />
+    <ClCompile Include="lib\vulkan\validationLayer.cpp" />
     <ClCompile Include="lib\vulkan\extension.cpp" />
     <ClCompile Include="lib\vulkan\swap_chain_support.cpp" />
+    <ClCompile Include="lib\vulkan\container.cpp" />
+    <ClCompile Include="lib\vulkan\core\instance.cpp" />
+    <ClCompile Include="helloTriangleApp.cpp" />
+    <ClCompile Include="lib\vulkan\initializeInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hpp" />
     <ClInclude Include="lib\glwindow.hpp" />
-    <ClInclude Include="hello_triangle_app.hpp" />
     <ClInclude Include="lib\vulkan\vulkan.hpp" />
     <ClInclude Include="lib\create_helper.hpp" />
-    <ClInclude Include="lib\vulkan\instance.hpp" />
     <ClInclude Include="lib\renderer.hpp" />
-    <ClInclude Include="lib\vulkan\vulkan_debug.hpp" />
-    <ClInclude Include="lib\vulkan\vk_object_types.hpp" />
+    <ClInclude Include="lib\vulkan\debugUtils.hpp" />
+    <ClInclude Include="lib\vulkan\vkObjectTypes.hpp" />
     <ClInclude Include="pch.hpp" />
-    <ClInclude Include="lib\vulkan\logicaldevice.hpp" />
-    <ClInclude Include="lib\vulkan\physicaldevice.hpp" />
     <ClInclude Include="lib\vulkan\queuefamily.hpp" />
     <ClInclude Include="lib\vulkan\utilities.hpp" />
-    <ClInclude Include="lib\vulkan\surface.hpp" />
-    <ClInclude Include="lib\vulkan\validationlayer.hpp" />
+    <ClInclude Include="lib\vulkan\validationLayer.hpp" />
     <ClInclude Include="lib\vulkan\extension.hpp" />
     <ClInclude Include="lib\vulkan\swap_chain_support.hpp" />
+    <ClInclude Include="lib\vulkan\container.hpp" />
+    <ClInclude Include="lib\vulkan\core\core_commonheaders.hpp" />
+    <ClInclude Include="lib\vulkan\core\instance.hpp" />
+    <ClInclude Include="helloTriangleApp.hpp" />
+    <ClInclude Include="lib\vulkan\initializeInfo.hpp" />
   </ItemGroup>
 </Project>

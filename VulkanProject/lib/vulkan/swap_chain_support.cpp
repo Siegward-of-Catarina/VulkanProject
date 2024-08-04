@@ -1,8 +1,8 @@
 #include "swap_chain_support.hpp"
-namespace my_library::vulkan::swapchain_support
+namespace my_library::vkm::swapchain_support
 {
    const details
-   query_details( const vk_physicaldevice& device, const unq_vk_surface& surface )
+   query_details( const PhysicalDevice& device, const UniqueSurface& surface )
    {
       details d;
       d.capabilities  = device.getSurfaceCapabilitiesKHR( surface.get() );

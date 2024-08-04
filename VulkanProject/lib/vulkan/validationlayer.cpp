@@ -1,11 +1,10 @@
-#include "validationlayer.hpp"
-#include "vk_object_types.hpp"
+#include "validationLayer.hpp"
+#include "vkObjectTypes.hpp"
 namespace
 {
    bool layerfound = false;
-
    bool
-   check_validationlayer_support( const std::vector<const char*>& validationlayers )
+   checkValidationLayerSupport( const std::vector<const char*>& validationlayers )
    {
 
       if ( validationlayers.empty() ) return false;
@@ -28,17 +27,17 @@ namespace
    }
 }    // namespace
 
-namespace my_library::vulkan::layer
+namespace my_library::vkm::layer
 {
    const std::vector<const char*>
-   get_validationlayers()
+   getValidationLayers()
    {
 #ifdef NDEBUG
       const std::vector<const char*> validationlayers {};
 #else
       const std::vector<const char*> validationlayers { "VK_LAYER_KHRONOS_validation" };
       //一度だけチェックする
-      static const bool valid { check_validationlayer_support( validationlayers ) };
+      static const bool valid { checkValidationLayerSupport( validationlayers ) };
 
       if ( !valid ) throw std::runtime_error( "validation layers requested, but not available!" );
 #endif

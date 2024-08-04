@@ -1,4 +1,5 @@
 #include "renderer.hpp"
+#include "./vulkan/initializeInfo.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -7,13 +8,14 @@
 namespace my_library
 {
    void
-   renderer::init( GLFWwindow* window, const bool debug )
+   Renderer::init( std::unique_ptr<my_library::window::GLwindow>& gl_window, const bool debug )
    {
-      _vulkan->init( window, debug );
+      vkm::vulkan::CreateInfo vulkan_create_info { gl_window,"triangle" };
+      _vulkan->init( vulkan_create_info, debug );
    }
 
-   renderer::renderer() : _vulkan { std::make_unique<vulkan::vulkan>() } {}
+   Renderer::Renderer() : _vulkan { std::make_unique<vkm::Vulkan>() } {}
 
-   renderer::~renderer() {}
+   Renderer::~Renderer() {}
 
 }    // namespace my_library
