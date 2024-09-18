@@ -1,5 +1,6 @@
 #include "helloTriangleApp.hpp"
 
+#include "lib/enumExtensions.hpp"
 #include "lib/glwindow.hpp"
 #include "lib/renderer.hpp"
 
@@ -17,7 +18,26 @@ namespace my_app
    HelloTriangleApp::init()
    {
       _window->init();
-      _renderer->init( _window, debug );
+
+      using DebugSeverityFlagBits    = my_library::renderer::DebugSeverityFlagBits;
+      using DebugMessageTypeFlagBits = my_library::renderer::DebugMessageTypeFlagBits;
+      using DebugSeverityFlags       = my_library::enumExtensions::BitFlag<DebugSeverityFlagBits>;
+      using DebugMessageTypeFlags    = my_library::enumExtensions::BitFlag<DebugMessageTypeFlagBits>;
+
+      DebugSeverityFlags debug_severity_flags {
+         {DebugSeverityFlagBits::Error, DebugSeverityFlagBits::Warning, DebugSeverityFlagBits::Verbose}
+      };
+      DebugMessageTypeFlags debug_msg_flags {
+         {DebugMessageTypeFlagBits::General,
+          DebugMessageTypeFlagBits::Performance,
+          DebugMessageTypeFlagBits::Validation}
+      };
+      my_library::renderer::CreateInfo create_info { .gl_window { _window },
+                                                     .app_name { "vulkan tutorial" },
+                                                     .enable_debug { debug },
+                                                     .debug_severity_flags { debug_severity_flags },
+                                                     .debug_msg_type_flags { debug_msg_flags } };
+      _renderer->init( create_info );
    }
 
    void

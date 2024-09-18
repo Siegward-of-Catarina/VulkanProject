@@ -1,6 +1,6 @@
 #include "extension.hpp"
 
-#include "utilities.hpp"
+#include "../utilities.hpp"
 
 #include <GLFW/glfw3.h>    //拡張機能を取得するために必要
 #include <set>

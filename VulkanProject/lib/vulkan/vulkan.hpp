@@ -9,44 +9,32 @@ namespace my_library
 {
    namespace window
    {
-      class GLwindow;
+      class GLwindowForVk;
    }
+
    namespace vkm
    {
       namespace vulkan
       {
          struct CreateInfo;
       }
-      namespace instance
-      {
-         struct CreateInfo;
-      }
-      class Container;
+
+      class VkObjContainer;
       class Instance;
-
-   }
-}    // namespace my_library
-namespace my_library
-{
-   namespace vkm
-   {
-
+      class DebugUtilsMessenger;
+      class Surface;
       class Vulkan
       {
       public:
          void
          init( const vulkan::CreateInfo& create_info, const bool debug = false );
-
          Vulkan();
          ~Vulkan();
 
       private:
-
-      private:
-         std::shared_ptr<Container> _container;
          std::unique_ptr<Instance> _instance;
-         Queue _graphics_queue;
-         Queue _present_queue;
+         std::unique_ptr<DebugUtilsMessenger> _debug_messenger;
+         std::unique_ptr<Surface>             _surface;
       };
    }    // namespace vkm
 

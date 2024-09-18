@@ -71,20 +71,6 @@ namespace my_library::window    // glwindow
       return _title;
    }
 
-   const std::vector<const char*>
-   GLwindow::getRequiredInstanceExtensions( const bool debug ) const
-   {
-      uint32_t     glfw_extension_count { 0 };
-      const char** glfw_extensions;
-      glfw_extensions = glfwGetRequiredInstanceExtensions( &glfw_extension_count );
-      std::vector<const char*> extensions { glfw_extensions, glfw_extensions + glfw_extension_count };
-#ifdef __APPLE__    // MacOs‚É‘Î‰ž‚·‚é‚½‚ß“ü‚ê‚é
-      extensions.emplace_back( VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME );
-#endif
-      if( debug ) extensions.emplace_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
-      return extensions;
-   }
-
    GLwindow::GLwindow( const std::uint32_t& width, const std::uint32_t& height, const std::string& title )
      : _width { width }, _height { height }, _title { title }
    {}

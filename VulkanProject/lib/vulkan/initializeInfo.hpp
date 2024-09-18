@@ -1,10 +1,13 @@
 #pragma once
 #include "vkObjectTypes.hpp"
+#include "debugUtils.hpp"
+
+#include <optional>
 namespace my_library
 {
    namespace window
    {
-      class GLwindow;
+      class GLwindowForVk;
    }
 }    // namespace my_library
 
@@ -16,20 +19,12 @@ namespace my_library
       {
          struct CreateInfo
          {
-            std::unique_ptr<my_library::window::GLwindow>& window;
-            std::string      app_name;
+            std::unique_ptr<my_library::window::GLwindowForVk> window;
+            std::string                                        app_name { "my_app" };
+            DebugUtilsMesseagSeverityFlagsEXT                  debug_severity_flags {};
+            DebugUtilsMessageTypeFlagsEXT                      debug_msg_type_flags {};
          };
       }    // namespace vulkan
-      namespace instance
-      {
-         struct CreateInfo
-         {
-            std::string                      app_name;
-            debug_utl::MessengerCreateInfoEXT debug_info;
-            std::vector<const char*>         extensions;
-            std::vector<const char*>         validation_layers;
-            DispatchLoaderDynamic            dld;
-         };
-      }    // namespace instance
+      
    }       // namespace vkm
 }    // namespace my_library

@@ -6,21 +6,37 @@ namespace my_library
 {
    namespace vkm
    {
-      namespace debug_utl
+      class DebugUtilsMessengerCreateInfo
       {
-         const MesseagSeverityFlagsEXT SeverityFlagsAllBits =
-           MessageSeverityFlagBitsEXT::eError | MessageSeverityFlagBitsEXT::eWarning | MessageSeverityFlagBitsEXT::eInfo
-           | MessageSeverityFlagBitsEXT::eVerbose;
+      public:
+         DebugUtilsMessengerCreateInfo();
+         DebugUtilsMessengerCreateInfo( const DebugUtilsMesseagSeverityFlagsEXT severityflag,
+                                        const DebugUtilsMessageTypeFlagsEXT     messageflag );
+         ~DebugUtilsMessengerCreateInfo();
+         void
+         setMessageSeverity( const DebugUtilsMesseagSeverityFlagsEXT severityflag );
 
-         const MessageTypeFlagsEXT MessageTypeFlagsAllBits =
-           MessageTypeFlagBitsEXT::eDeviceAddressBinding | MessageTypeFlagBitsEXT::ePerformance
-           | MessageTypeFlagBitsEXT::eValidation | MessageTypeFlagBitsEXT::eGeneral;
+         void
+         setMessageType( const DebugUtilsMessageTypeFlagsEXT messageflag );
 
-         const PFN_vkDebugUtilsMessengerCallbackEXT callBack();
+         const vkm::DebugUtilsMessengerCreateInfoEXT& vkobj;
+      private:
+         vkm::DebugUtilsMessengerCreateInfoEXT _create_info;
+      };
 
-         const MessengerCreateInfoEXT
-         populateCreateInfo();
+      class DebugUtilsMessenger
+      {
+      public:
+         const vkm::UniqueDebugUtilsMessengerEXT& vkobj;
+         void
+         create( const UniqueInstance&                instance,
+                 const vkm::DebugUtilsMessengerCreateInfoEXT& create_info,
+                 const DispatchLoaderDynamic&         dld );
+         DebugUtilsMessenger();
+         ~DebugUtilsMessenger();
 
-      }    // namespace debug_utl
-   }       // namespace vkm
+      private:
+         vkm::UniqueDebugUtilsMessengerEXT _messenger;
+      };
+   }    // namespace vkm
 }    // namespace my_library

@@ -1,18 +1,22 @@
 #pragma once
 #include "core_commonheaders.hpp"
-struct GLFWwindow;
-namespace my_library::vulkan
+namespace my_library::window
 {
-   class surface
+   class GLwindowForVk;
+}
+namespace my_library::vkm
+{
+   class Surface
    {
-   private:
-
    public:
       void
-      init( GLFWwindow* window );
-      const unq_vk_surface&
-      vk_obj();
-      surface( const shared_container& c );
-      ~surface();
+      create( const UniqueInstance& instance );
+
+      const UniqueSurface& vkobj;
+      Surface( const std::unique_ptr<my_library::window::GLwindowForVk>& window );
+      ~Surface();
+   private:
+      const std::unique_ptr<my_library::window::GLwindowForVk>& _window;
+      UniqueSurface                                             _surface;
    };
 }    // namespace my_library::vulkan

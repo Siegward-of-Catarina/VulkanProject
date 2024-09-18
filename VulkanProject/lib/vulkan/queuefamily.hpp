@@ -1,6 +1,6 @@
 #pragma once
 #include "vkObjectTypes.hpp"
-#include "utilities.hpp"
+#include "../utilities.hpp"
 
 #include <optional>
 namespace my_library::vkm::queuefamily

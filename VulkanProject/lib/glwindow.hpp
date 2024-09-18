@@ -30,13 +30,9 @@ namespace my_library::window
       height();
       const std::string&
       title();
-      //‚Ì‚¿‚É•ª—£‚·‚é—\’è
-      const std::vector<const char*>
-      getRequiredInstanceExtensions( const bool debug ) const;
-
       explicit GLwindow( const std::uint32_t& width, const std::uint32_t& height, const std::string& title );
       GLwindow() = delete;
-      ~GLwindow();
+      virtual ~GLwindow();
 
    private:
       std::unique_ptr<GLFWwindow, GLdeleter> _glfw_window;

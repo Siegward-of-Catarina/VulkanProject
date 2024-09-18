@@ -4,17 +4,17 @@ namespace my_library
 {
    namespace vkm
    {
-      class Container
+      class VkObjContainer
       {
       public:
          void
-         registerCtr( UniqueInstance& instance );
+         registerCtr( UniqueInstance instance );
          void
          registerCtr( PhysicalDevice& gpu );
          void
          registerCtr( UniqueSurface& surface );
-         Container();
-         ~Container();
+         explicit VkObjContainer(const DispatchLoaderDynamic dispatchloaderdynamic);
+         ~VkObjContainer();
 
       public:
          const DispatchLoaderDynamic& dld;

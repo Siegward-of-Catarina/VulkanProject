@@ -6,16 +6,18 @@
     <ClCompile Include="lib\glwindow.cpp" />
     <ClCompile Include="lib\vulkan\vulkan.cpp" />
     <ClCompile Include="lib\renderer.cpp" />
-    <ClCompile Include="lib\vulkan\debugUtils.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="lib\vulkan\queuefamily.cpp" />
     <ClCompile Include="lib\vulkan\validationLayer.cpp" />
     <ClCompile Include="lib\vulkan\extension.cpp" />
     <ClCompile Include="lib\vulkan\swap_chain_support.cpp" />
     <ClCompile Include="lib\vulkan\container.cpp" />
-    <ClCompile Include="lib\vulkan\core\instance.cpp" />
     <ClCompile Include="helloTriangleApp.cpp" />
     <ClCompile Include="lib\vulkan\initializeInfo.cpp" />
+    <ClCompile Include="lib\vulkan\glwindowForVk.cpp" />
+    <ClCompile Include="lib\vulkan\core\surface.cpp" />
+    <ClCompile Include="lib\vulkan\core\instance.cpp" />
+    <ClCompile Include="lib\vulkan\debugUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hpp" />
@@ -23,18 +25,21 @@
     <ClInclude Include="lib\vulkan\vulkan.hpp" />
     <ClInclude Include="lib\create_helper.hpp" />
     <ClInclude Include="lib\renderer.hpp" />
-    <ClInclude Include="lib\vulkan\debugUtils.hpp" />
     <ClInclude Include="lib\vulkan\vkObjectTypes.hpp" />
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="lib\vulkan\queuefamily.hpp" />
-    <ClInclude Include="lib\vulkan\utilities.hpp" />
+    <ClInclude Include="lib\utilities.hpp" />
     <ClInclude Include="lib\vulkan\validationLayer.hpp" />
     <ClInclude Include="lib\vulkan\extension.hpp" />
     <ClInclude Include="lib\vulkan\swap_chain_support.hpp" />
     <ClInclude Include="lib\vulkan\container.hpp" />
     <ClInclude Include="lib\vulkan\core\core_commonheaders.hpp" />
-    <ClInclude Include="lib\vulkan\core\instance.hpp" />
     <ClInclude Include="helloTriangleApp.hpp" />
     <ClInclude Include="lib\vulkan\initializeInfo.hpp" />
+    <ClInclude Include="lib\enumExtensions.hpp" />
+    <ClInclude Include="lib\vulkan\glwindowForVk.hpp" />
+    <ClInclude Include="lib\vulkan\core\surface.hpp" />
+    <ClInclude Include="lib\vulkan\core\instance.hpp" />
+    <ClInclude Include="lib\vulkan\debugUtils.hpp" />
   </ItemGroup>
 </Project>

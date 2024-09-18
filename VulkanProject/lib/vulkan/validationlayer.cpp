@@ -6,7 +6,6 @@ namespace
    bool
    checkValidationLayerSupport( const std::vector<const char*>& validationlayers )
    {
-
       if ( validationlayers.empty() ) return false;
 
       const std::vector<vk::LayerProperties> availablelayers { vk::enumerateInstanceLayerProperties() };
