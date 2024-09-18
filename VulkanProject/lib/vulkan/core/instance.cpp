@@ -138,18 +138,30 @@ namespace my_library
       {
          PhysicalDevice out {};
          uint16_t       hi_score { 0 };
+         bool           queuefamilyvalid { false };
          for ( auto& device : _devices )
          {
+            //
+            queuefamily::indices indices { queuefamily::find_queuefamily( device.first, surface, _dld ) };
+            if ( indices.is_complete() )
+            {
+               // 一度でも通ればサポートしているデバイスは存在する。
+               queuefamilyvalid = true;
+               device.second += 10;
+            }
+
             auto dev_properties = device.first.getProperties();
             switch ( dev_properties.deviceType )
             {
-               case vk::PhysicalDeviceType::eDiscreteGpu : device.second = 100; break;     // 外付けgpu 圧倒的に優先する
+               case vk::PhysicalDeviceType::eDiscreteGpu : device.second = 100; break;    // 外付けgpu 圧倒的に優先する
                case vk::PhysicalDeviceType::eIntegratedGpu : device.second = 50; break;    // cpu内部gpu
-               case vk::PhysicalDeviceType::eCpu : device.second = 10; break;               // cpuを使用
+               case vk::PhysicalDeviceType::eCpu : device.second = 10; break;              // cpuを使用
                case vk::PhysicalDeviceType::eVirtualGpu : device.second = 5; break;        // 仮想gpu
                case vk::PhysicalDeviceType::eOther : device.second = 0; break;    // 上のどれにも当てはまらない
             }
          }
+
+         if ( !queuefamilyvalid ) utl::runtimeError( "devices is not support queuefamilies" );
       }
 
       Instance::Instance() : dld { _dld }, vkobj { _instance }, _devices {} { _dld.init(); }

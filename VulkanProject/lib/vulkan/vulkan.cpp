@@ -49,7 +49,6 @@ namespace my_library
             case vk::PhysicalDeviceType::eIntegratedGpu : utl::log( "device type is integratedGpu" ); break;
             case vk::PhysicalDeviceType::eOther : utl::log( "device type is other" ); break;
             case vk::PhysicalDeviceType::eVirtualGpu : utl::log( "device type is virtual" ); break;
-
          }
          _debug_messenger->create( _instance->vkobj, debug_msg_create_info.vkobj, _instance->dld );
 
@@ -58,7 +57,7 @@ namespace my_library
       }
       Vulkan::Vulkan()
         : _instance { std::make_unique<Instance>() }
-          , _debug_messenger { std::make_unique<DebugUtilsMessenger>() }
+        , _debug_messenger { std::make_unique<DebugUtilsMessenger>() }
         , _surface {}
       {}
       Vulkan::~Vulkan() {}
