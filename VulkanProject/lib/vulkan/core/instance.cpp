@@ -31,7 +31,6 @@ namespace
             if ( strcmp( extension, extension_property.extensionName ) == 0 )
             {
                extension_found = true;
-               my_library::utl::log( "instance extensions is supported." );
                break;
             }
          }
@@ -85,6 +84,7 @@ namespace
                                            VK_API_VERSION_1_2 );
 
       assert( checkExtensionSupport( create_datas.extensions, dld ) );
+      my_library::utl::log( "instance extensions is supported." );
 
       const vkm::InstanceCreateInfo createInfo { {}, &app_info, {}, create_datas.extensions };
       UniqueInstance                instance { vk::createInstanceUnique( createInfo, nullptr, dld ) };
@@ -101,6 +101,8 @@ namespace
                                           VK_API_VERSION_1_2 );
 
       assert( checkExtensionSupport( create_datas.extensions, dld ) );
+      my_library::utl::log( "instance extensions is supported." );
+
       auto validation_layers = getValidationLayers();
       assert( !validation_layers.empty() );
 
@@ -124,44 +126,27 @@ namespace my_library
       void
       Instance::create( const instance::CreateInfo& create_info, const bool debug )
       {
-         if ( debug ) { _instance = std::move( ::createDebug( create_info, _dld ) ); }
-         else { _instance = std::move( ::create( create_info, _dld ) ); }
-
-         // 関数ポインタ取得
-         _dld.init( *_instance );
+         if ( debug )
+         {
+            _instance = std::move( ::createDebug( create_info, _dld ) );
+            // 関数ポインタ取得
+            _dld.init( *_instance );
+            _dbg_messenger = _instance->createDebugUtilsMessengerEXTUnique( create_info.debug_info, nullptr, _dld );
+         }
+         else
+         {
+            _instance = std::move( ::create( create_info, _dld ) );
+            // 関数ポインタ取得
+            _dld.init( *_instance );
+         }
 
          for ( auto& device : _instance->enumeratePhysicalDevices( _dld ) ) { _devices.emplace_back( device, 0u ); }
       }
 
-      const PhysicalDevice
-      Instance::pickUpSuitableDevice( const UniqueSurface& surface )
+      const std::vector<PhysicalDevice>
+      Instance::enumeratePhysicalDevices()
       {
-         PhysicalDevice out {};
-         uint16_t       hi_score { 0 };
-         bool           queuefamilyvalid { false };
-         for ( auto& device : _devices )
-         {
-            //
-            queuefamily::indices indices { queuefamily::find_queuefamily( device.first, surface, _dld ) };
-            if ( indices.is_complete() )
-            {
-               // 一度でも通ればサポートしているデバイスは存在する。
-               queuefamilyvalid = true;
-               device.second += 10;
-            }
-
-            auto dev_properties = device.first.getProperties();
-            switch ( dev_properties.deviceType )
-            {
-               case vk::PhysicalDeviceType::eDiscreteGpu : device.second = 100; break;    // 外付けgpu 圧倒的に優先する
-               case vk::PhysicalDeviceType::eIntegratedGpu : device.second = 50; break;    // cpu内部gpu
-               case vk::PhysicalDeviceType::eCpu : device.second = 10; break;              // cpuを使用
-               case vk::PhysicalDeviceType::eVirtualGpu : device.second = 5; break;        // 仮想gpu
-               case vk::PhysicalDeviceType::eOther : device.second = 0; break;    // 上のどれにも当てはまらない
-            }
-         }
-
-         if ( !queuefamilyvalid ) utl::runtimeError( "devices is not support queuefamilies" );
+         return _instance->enumeratePhysicalDevices( _dld );
       }
 
       Instance::Instance() : dld { _dld }, vkobj { _instance }, _devices {} { _dld.init(); }

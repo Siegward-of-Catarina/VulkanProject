@@ -19,9 +19,8 @@ namespace my_library::vkm
    public:
       void
       create( const instance::CreateInfo& create_info, const bool debug );
-
-      const PhysicalDevice
-      pickUpSuitableDevice(const UniqueSurface& surface);
+      const std::vector<PhysicalDevice>
+      enumeratePhysicalDevices();
 
    public:
       const UniqueInstance&        vkobj;
@@ -30,9 +29,10 @@ namespace my_library::vkm
       ~Instance();
 
    private:
-      UniqueInstance              _instance;
-      DispatchLoaderDynamic       _dld;
-      std::vector< std::pair<PhysicalDevice, uint16_t> > _devices;
+      UniqueInstance                                    _instance;
+      UniqueDebugUtilsMessengerEXT                      _dbg_messenger;
+      DispatchLoaderDynamic                             _dld;
+      std::vector<std::pair<PhysicalDevice, uint16_t> > _devices;
    };
 
 }    // namespace my_library::vkm

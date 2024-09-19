@@ -43,19 +43,5 @@ namespace my_library
       {
          _create_info.setMessageType( messageflag );
       }
-
-      void
-      DebugUtilsMessenger::create( const UniqueInstance&                instance,
-                                   const vkm::DebugUtilsMessengerCreateInfoEXT& create_info,
-                                   const DispatchLoaderDynamic&         dld )
-      {
-         assert( instance );
-         _messenger = instance->createDebugUtilsMessengerEXTUnique( create_info, nullptr, dld );
-         if ( !_messenger ) { utl::runtimeError( "failed create debug_messenger." ); }
-         utl::log( "create DebugUtilsMessenger succeeded." );
-      }
-
-      DebugUtilsMessenger::DebugUtilsMessenger() : vkobj { _messenger } {}
-      DebugUtilsMessenger::~DebugUtilsMessenger() {}
    }    // namespace vkm
 }    // namespace my_library

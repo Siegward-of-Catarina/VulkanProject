@@ -21,8 +21,8 @@ namespace my_library
 
       class VkObjContainer;
       class Instance;
-      class DebugUtilsMessenger;
       class Surface;
+      class Device;
       class Vulkan
       {
       public:
@@ -33,8 +33,8 @@ namespace my_library
 
       private:
          std::unique_ptr<Instance> _instance;
-         std::unique_ptr<DebugUtilsMessenger> _debug_messenger;
-         std::unique_ptr<Surface>             _surface;
+         std::unique_ptr<Surface>  _surface;
+         std::unique_ptr<Device>  _device;
       };
    }    // namespace vkm
 

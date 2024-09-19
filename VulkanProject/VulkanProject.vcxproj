@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="app.cpp" />
+    <ClCompile Include="lib\vulkan\core\device.cpp" />
     <ClCompile Include="lib\vulkan\core\instance.cpp" />
     <ClCompile Include="lib\vulkan\core\surface.cpp" />
     <ClCompile Include="lib\vulkan\debugUtils.cpp" />
@@ -34,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hpp" />
+    <ClInclude Include="lib\vulkan\core\device.hpp" />
     <ClInclude Include="lib\vulkan\core\instance.hpp" />
     <ClInclude Include="lib\vulkan\core\surface.hpp" />
     <ClInclude Include="lib\vulkan\debugUtils.hpp" />
