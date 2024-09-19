@@ -59,13 +59,12 @@ namespace my_library::vkm
    Device::pickUpSuitablePhysicalDevice( const UniqueSurface& surface )
    {
       uint16_t       hi_score { 0 };
-      uint16_t       features_support_point { 100 };
+      const uint16_t       features_support_point { 100 };
       for ( auto& device : _physicaldevices )
       {
          if ( ::isSupportVulkanFeatures( device.first, surface, _dld ) ) { device.second += features_support_point; }
 
          auto dev_properties = device.first.getProperties();
-         utl::log( dev_properties.deviceName );
          switch ( dev_properties.deviceType )
          {
             case vk::PhysicalDeviceType::eDiscreteGpu : device.second += 50; break;    // äOïtÇØgpu à≥ì|ìIÇ…óDêÊÇ∑ÇÈ
