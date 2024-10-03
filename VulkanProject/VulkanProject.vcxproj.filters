@@ -8,8 +8,6 @@
     <ClCompile Include="lib\renderer.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="lib\vulkan\queuefamily.cpp" />
-    <ClCompile Include="lib\vulkan\validationLayer.cpp" />
-    <ClCompile Include="lib\vulkan\extension.cpp" />
     <ClCompile Include="lib\vulkan\swap_chain_support.cpp" />
     <ClCompile Include="lib\vulkan\container.cpp" />
     <ClCompile Include="helloTriangleApp.cpp" />
@@ -19,6 +17,7 @@
     <ClCompile Include="lib\vulkan\core\instance.cpp" />
     <ClCompile Include="lib\vulkan\debugUtils.cpp" />
     <ClCompile Include="lib\vulkan\core\device.cpp" />
+    <ClCompile Include="lib\vulkan\core\swapchain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hpp" />
@@ -30,8 +29,6 @@
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="lib\vulkan\queuefamily.hpp" />
     <ClInclude Include="lib\utilities.hpp" />
-    <ClInclude Include="lib\vulkan\validationLayer.hpp" />
-    <ClInclude Include="lib\vulkan\extension.hpp" />
     <ClInclude Include="lib\vulkan\swap_chain_support.hpp" />
     <ClInclude Include="lib\vulkan\container.hpp" />
     <ClInclude Include="lib\vulkan\core\core_commonheaders.hpp" />
@@ -43,5 +40,6 @@
     <ClInclude Include="lib\vulkan\core\instance.hpp" />
     <ClInclude Include="lib\vulkan\debugUtils.hpp" />
     <ClInclude Include="lib\vulkan\core\device.hpp" />
+    <ClInclude Include="lib\vulkan\core\swapchain.hpp" />
   </ItemGroup>
 </Project>

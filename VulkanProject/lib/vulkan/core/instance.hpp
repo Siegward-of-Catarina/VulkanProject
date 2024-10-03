@@ -11,6 +11,7 @@ namespace my_library::vkm
          std::string                      app_name;
          DebugUtilsMessengerCreateInfoEXT debug_info;
          std::vector<const char*>         extensions;
+         std::vector<const char*>         validationlayers;
       };
    }    // namespace instance
 
@@ -23,8 +24,8 @@ namespace my_library::vkm
       enumeratePhysicalDevices();
 
    public:
-      const UniqueInstance&        vkobj;
-      const DispatchLoaderDynamic& dld;
+      const UniqueInstance&           vkobj;
+      const DispatchLoaderDynamic&    dld;
       Instance();
       ~Instance();
 

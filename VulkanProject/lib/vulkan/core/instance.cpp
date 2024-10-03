@@ -3,7 +3,6 @@
 #include "../../../pch.hpp"
 #include "../../utilities.hpp"
 #include "../debugUtils.hpp"
-#include "../extension.hpp"
 #include "../queuefamily.hpp"
 
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
@@ -13,8 +12,6 @@ namespace
    using UniqueInstance        = vkm::UniqueInstance;
    using InstanceCreateDatas   = vkm::instance::CreateInfo;
    using DispatchLoaderDynamic = vkm::DispatchLoaderDynamic;
-
-   bool layerfound = false;
 
    const bool
    checkExtensionSupport( std::vector<const char*> extensions, const DispatchLoaderDynamic& dld )
@@ -37,41 +34,6 @@ namespace
          if ( !extension_found ) return false;
       }
       return true;
-   }
-   bool
-   checkValidationLayerSupport( const std::vector<const char*>& validationlayers )
-   {
-      if ( validationlayers.empty() ) return false;
-
-      const std::vector<vkm::LayerProperties> availablelayers { vk::enumerateInstanceLayerProperties() };
-      bool                                    layerfound { false };
-      for ( const char* layername : validationlayers )
-      {
-         for ( const auto& layerproperties : availablelayers )
-         {
-            if ( strcmp( layername, layerproperties.layerName ) == 0 )
-            {
-               layerfound = true;
-               break;
-            }
-         }
-         if ( !layerfound ) { return false; }
-      }
-      return true;
-   }
-   const std::vector<const char*>
-   getValidationLayers()
-   {
-#ifdef NDEBUG
-      const std::vector<const char*> validationlayers {};
-#else
-      const std::vector<const char*> validationlayers { "VK_LAYER_KHRONOS_validation" };
-      // 一度だけチェックする
-      static const bool valid { checkValidationLayerSupport( validationlayers ) };
-
-      if ( !valid ) throw std::runtime_error( "validation layers requested, but not available!" );
-#endif
-      return validationlayers;
    }
 
    UniqueInstance
@@ -103,11 +65,10 @@ namespace
       assert( checkExtensionSupport( create_datas.extensions, dld ) );
       my_library::utl::log( "instance extensions is supported." );
 
-      auto validation_layers = getValidationLayers();
-      assert( !validation_layers.empty() );
+      assert( !create_datas.validationlayers.empty() );
 
       const vkm::StructureChain<vkm::InstanceCreateInfo, vkm::DebugUtilsMessengerCreateInfoEXT> create_instance_info {
-         {{}, &app_info, validation_layers, create_datas.extensions},
+         {{}, &app_info, create_datas.validationlayers, create_datas.extensions},
          create_datas.debug_info
       };
 
@@ -149,7 +110,10 @@ namespace my_library
          return _instance->enumeratePhysicalDevices( _dld );
       }
 
-      Instance::Instance() : dld { _dld }, vkobj { _instance }, _devices {} { _dld.init(); }
+      Instance::Instance() : dld { _dld }, vkobj { _instance }, _devices {}
+      {
+         _dld.init();
+      }
       Instance::~Instance() {}
    }    // namespace vkm
 

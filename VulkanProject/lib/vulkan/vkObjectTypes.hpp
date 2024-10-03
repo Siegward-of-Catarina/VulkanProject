@@ -38,5 +38,13 @@ namespace my_library::vkm
    //----swapchain----------------------------
    using SurfaceCapabilitiesKHR = vk::SurfaceCapabilitiesKHR;
    using SurfaceFormatKHR       = vk::SurfaceFormatKHR;
+   using Format                 = vk::Format;
+   using ColorSpace             = vk::ColorSpaceKHR;
    using PresentModeKHR         = vk::PresentModeKHR;
+   using SwapChainCreateInfo    = vk::SwapchainCreateInfoKHR;
+   using ImageUsageFlagBits     = vk::ImageUsageFlagBits;
+   using ImageUsageFlags        = vk::ImageUsageFlags;
+   using SharingMode            = vk::SharingMode;
+   using CompositeAlphaFlagBits = vk::CompositeAlphaFlagBitsKHR;
+   using CompositeAlphaFlags    = vk::CompositeAlphaFlagsKHR;
 }    // namespace my_library::vkm
